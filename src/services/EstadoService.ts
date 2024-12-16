@@ -7,15 +7,17 @@ export class EstadoService {
     return await Estado.findAll();
   }
 
-  async encontrarPorId(id: number): Promise<IEstado | null> {
+  encontrarPorId = async (id: number): Promise<IEstado | null> => {
     return await Estado.findByPk(id);
-  }
+  };
 
-  async crearNuevoEstado(data: Omit<IEstado, "idestado">): Promise<IEstado> {
+  crearNuevoEstado = async (
+    data: Omit<IEstado, "idestado">
+  ): Promise<IEstado | null> => {
     const estadoExistente = await Estado.findOne({
       where: { nombre: data.nombre },
     });
-    if (estadoExistente) throw new Error("Estado ya existe.");
+    if (estadoExistente) return null;
 
     const estado = await ejecutarSP("InsertEstado", {
       nombre: data.nombre,
@@ -24,14 +26,15 @@ export class EstadoService {
     if (!estado[0][0].idestado) throw new Error("No se pudo crear el estado.");
 
     return (await Estado.findByPk(estado[0][0].idestado)) as IEstado;
-  }
+  };
 
-  async actualizarEstado(id: number, data: Partial<IEstado>): Promise<IEstado> {
+  actualizarEstado = async (
+    id: number,
+    data: Partial<IEstado>
+  ): Promise<IEstado | null> => {
     const estadoActual = await this.encontrarPorId(id);
 
-    if (!estadoActual) {
-      throw new Error("Estado no encontrado.");
-    }
+    if (!estadoActual) return null;
 
     await ejecutarSP("UpdateEstado", {
       idestado: id,
@@ -39,5 +42,5 @@ export class EstadoService {
     });
 
     return (await this.encontrarPorId(id)) as IEstado;
-  }
+  };
 }

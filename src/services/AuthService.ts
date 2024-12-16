@@ -7,16 +7,16 @@ import { ILoginResponse } from "../interfaces/ILogin";
 import { ejecutarSP } from "../utils/dbUtils";
 
 class AuthService {
-  async registrarNuevoUsuario(
+  registrarNuevoUsuario = async (
     data: Omit<
       IUsuario,
       "idusuarios" | "fecha_creacion" | "fecha_actualizacion"
     >
-  ): Promise<IUsuario | null> {
+  ): Promise<IUsuario | null> => {
     const usuarioExistente = await Usuario.findOne({
       where: { correo_electronico: data.correo_electronico },
     });
-    if (usuarioExistente) throw new Error("Usuario ya existe.");
+    if (usuarioExistente) return null;
 
     const hashedPassword = await hashPassword(data.password);
     const result = await ejecutarSP("InsertUsuario", {
@@ -34,17 +34,17 @@ class AuthService {
       throw new Error("No se pudo registrar el usuario.");
 
     return (await Usuario.findByPk(result[0][0].idusuarios)) as IUsuario;
-  }
+  };
 
-  async loginUsuario(
+  loginUsuario = async (
     email: string,
     password: string
-  ): Promise<ILoginResponse | null> {
+  ): Promise<ILoginResponse | null> => {
     const usuario = await Usuario.findOne({
       where: { correo_electronico: email },
     });
 
-    if (!usuario) throw new Error("Usuario no encontrado.");
+    if (!usuario) return null;
 
     const passwordIsCorrect = await comparePassword(password, usuario.password);
 
@@ -57,7 +57,7 @@ class AuthService {
     };
 
     return data as ILoginResponse;
-  }
+  };
 }
 
 export default new AuthService();

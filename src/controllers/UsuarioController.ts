@@ -57,10 +57,12 @@ class UsuarioController {
         req.body
       );
 
-      if (!usuarioActualizado) {
-        sendError(res, `Usuario con id ${req.params.id} no encontrado.`, 404);
-        return;
-      }
+      if (!usuarioActualizado)
+        return sendError(
+          res,
+          `Usuario con id ${req.params.id} no encontrado.`,
+          404
+        );
 
       sendSuccess(res, usuarioActualizado);
     } catch (error: any) {

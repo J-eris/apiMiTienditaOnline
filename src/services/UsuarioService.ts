@@ -4,46 +4,40 @@ import { hashPassword } from "../utils/hash";
 import { Usuario } from "../models/Usuario";
 
 class UsuarioService {
-  async listarTodosUsuarios(): Promise<IUsuario[]> {
+  listarTodosUsuarios = async (): Promise<IUsuario[]> => {
     const usuarios = await Usuario.findAll({
       include: ["estado", "rol", "cliente"],
     });
     return usuarios as IUsuario[];
-  }
+  };
 
-  async encontrarPorId(id: number): Promise<IUsuario | null> {
+  encontrarPorId = async (id: number): Promise<IUsuario | null> => {
     const usuario = await Usuario.findByPk(id, {
       include: ["estado", "rol", "cliente"],
     });
 
-    if (!usuario) {
-      return null;
-    }
+    if (!usuario) return null;
 
     return usuario as IUsuario;
-  }
+  };
 
-  async encontrarPorCorreo(correo: string): Promise<IUsuario | null> {
+  encontrarPorCorreo = async (correo: string): Promise<IUsuario | null> => {
     const result = await Usuario.findOne({
       where: { correo_electronico: correo },
     });
 
-    if (!result) {
-      return null;
-    }
+    if (!result) return null;
 
     return result as IUsuario;
-  }
+  };
 
-  async actualizarUsuario(
+  actualizarUsuario = async (
     id: number,
     data: Partial<IUsuario>
-  ): Promise<IUsuario> {
+  ): Promise<IUsuario | null> => {
     const usuarioActual = await this.encontrarPorId(id);
 
-    if (!usuarioActual) {
-      throw new Error("Usuario no encontrado.");
-    }
+    if (!usuarioActual) return null;
 
     data.password = data.password
       ? await hashPassword(data.password)
@@ -64,17 +58,15 @@ class UsuarioService {
     });
 
     return (await this.encontrarPorId(id)) as IUsuario;
-  }
+  };
 
-  async cambiarEstadoUsuario(
+  cambiarEstadoUsuario = async (
     id: number,
     data: Partial<IUsuario>
-  ): Promise<IUsuario> {
+  ): Promise<IUsuario | null> => {
     const usuarioActual = await this.encontrarPorId(id);
 
-    if (!usuarioActual) {
-      throw new Error("Usuario no encontrado.");
-    }
+    if (!usuarioActual) return null;
 
     await ejecutarSP("SetEstadoUsuario", {
       idUsuario: id,
@@ -82,7 +74,7 @@ class UsuarioService {
     });
 
     return (await this.encontrarPorId(id)) as IUsuario;
-  }
+  };
 }
 
 export default new UsuarioService();

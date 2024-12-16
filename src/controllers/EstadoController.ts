@@ -20,10 +20,12 @@ export class EstadoController {
         parseInt(req.params.id)
       );
 
-      if (!estado) {
-        sendError(res, `Estado con id ${req.params.id} no encontrado.`, 404);
-        return;
-      }
+      if (!estado)
+        return sendError(
+          res,
+          `Estado con id ${req.params.id} no encontrado.`,
+          404
+        );
 
       sendSuccess(res, estado);
     } catch (error: any) {
@@ -34,6 +36,9 @@ export class EstadoController {
   async crearEstado(req: Request, res: Response) {
     try {
       const estado = await estadoService.crearNuevoEstado(req.body);
+
+      if (!estado) return sendError(res, `Estado ya existe.`, 400);
+
       sendSuccess(res, estado, 201);
     } catch (error: any) {
       sendError(res, error.message);
@@ -42,8 +47,19 @@ export class EstadoController {
 
   async actualizarEstado(req: Request, res: Response) {
     try {
-      await estadoService.actualizarEstado(parseInt(req.params.id), req.body);
-      sendSuccess(res, null, 204);
+      const estadoActualizado = await estadoService.actualizarEstado(
+        parseInt(req.params.id),
+        req.body
+      );
+
+      if (!estadoActualizado)
+        return sendError(
+          res,
+          `Estado con id ${req.params.id} no encontrado.`,
+          404
+        );
+
+      sendSuccess(res, estadoActualizado);
     } catch (error: any) {
       sendError(res, error.message);
     }

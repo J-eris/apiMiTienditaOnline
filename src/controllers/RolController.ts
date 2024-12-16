@@ -18,10 +18,12 @@ export class RolController {
     try {
       const rol = await rolService.encontrarPorId(parseInt(req.params.id));
 
-      if (!rol) {
-        sendError(res, `Rol con id ${req.params.id} no encontrado.`, 404);
-        return;
-      }
+      if (!rol)
+        return sendError(
+          res,
+          `Rol con id ${req.params.id} no encontrado.`,
+          404
+        );
 
       sendSuccess(res, rol);
     } catch (error: any) {
@@ -32,6 +34,9 @@ export class RolController {
   async crearRol(req: Request, res: Response) {
     try {
       const rol = await rolService.crearNuevoRol(req.body);
+
+      if (!rol) return sendError(res, `Rol ya existe.`, 400);
+
       sendSuccess(res, rol, 201);
     } catch (error: any) {
       sendError(res, error.message);
@@ -40,8 +45,19 @@ export class RolController {
 
   async actualizarRol(req: Request, res: Response) {
     try {
-      await rolService.actualizarRol(parseInt(req.params.id), req.body);
-      sendSuccess(res, null, 204);
+      const rolActualizado = await rolService.actualizarRol(
+        parseInt(req.params.id),
+        req.body
+      );
+
+      if (!rolActualizado)
+        return sendError(
+          res,
+          `Rol con id ${req.params.id} no encontrado.`,
+          404
+        );
+
+      sendSuccess(res, rolActualizado);
     } catch (error: any) {
       sendError(res, error.message);
     }

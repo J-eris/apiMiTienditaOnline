@@ -3,21 +3,21 @@ import { ICliente } from "../interfaces/ICliente";
 import { ejecutarSP } from "../utils/dbUtils";
 
 export class ClienteService {
-  async listarTodosClientes(): Promise<ICliente[]> {
+  listarTodosClientes = async (): Promise<ICliente[]> => {
     return await Cliente.findAll();
-  }
+  };
 
-  async encontrarPorId(id: number): Promise<ICliente | null> {
+  encontrarPorId = async (id: number): Promise<ICliente | null> => {
     return await Cliente.findByPk(id);
-  }
+  };
 
-  async crearNuevoCliente(
+  crearNuevoCliente = async (
     data: Omit<ICliente, "idClientes">
-  ): Promise<ICliente> {
+  ): Promise<ICliente | null> => {
     const clienteExistente = await Cliente.findOne({
       where: { razon_social: data.razon_social },
     });
-    if (clienteExistente) throw new Error("Cliente ya existe.");
+    if (clienteExistente) return null;
 
     const cliente = await ejecutarSP("InsertCliente", {
       razon_social: data.razon_social,
@@ -28,21 +28,18 @@ export class ClienteService {
       estado_idestado: data.estado_idestado || null,
     });
 
-    if (!cliente[0][0].idClientes)
-      throw new Error("No se pudo crear el cliente.");
+    // if (!cliente[0][0].idClientes) return null;
 
     return (await Cliente.findByPk(cliente[0][0].idClientes)) as ICliente;
-  }
+  };
 
-  async actualizarCliente(
+  actualizarCliente = async (
     id: number,
     data: Partial<ICliente>
-  ): Promise<ICliente> {
+  ): Promise<ICliente | null> => {
     const clienteActual = await this.encontrarPorId(id);
 
-    if (!clienteActual) {
-      throw new Error("Cliente no encontrado.");
-    }
+    if (!clienteActual) return null;
 
     await ejecutarSP("UpdateCliente", {
       idClientes: id,
@@ -55,17 +52,15 @@ export class ClienteService {
     });
 
     return (await this.encontrarPorId(id)) as ICliente;
-  }
+  };
 
-  async cambiarEstadoCliente(
+  cambiarEstadoCliente = async (
     id: number,
     data: Partial<ICliente>
-  ): Promise<ICliente> {
+  ): Promise<ICliente | null> => {
     const clienteActual = await this.encontrarPorId(id);
 
-    if (!clienteActual) {
-      throw new Error("Cliente no encontrado.");
-    }
+    if (!clienteActual) return null;
 
     await ejecutarSP("SetEstadoCliente", {
       idCliente: id,
@@ -73,5 +68,5 @@ export class ClienteService {
     });
 
     return (await this.encontrarPorId(id)) as ICliente;
-  }
+  };
 }

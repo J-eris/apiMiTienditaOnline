@@ -6,9 +6,8 @@ class AuthController {
   async registrarUsuario(req: Request, res: Response) {
     try {
       const usuario = await authService.registrarNuevoUsuario(req.body);
-      if (!usuario) {
-        sendError(res, `No se pudo registrar el usuario.`, 500);
-      }
+
+      if (!usuario) return sendError(res, `Usuario ya existe.`, 400);
 
       sendSuccess(res, usuario, 201);
     } catch (error: any) {
@@ -22,9 +21,8 @@ class AuthController {
         req.body.email,
         req.body.password
       );
-      if (!usuario) {
-        sendError(res, `Credenciales inválidas.`, 400);
-      }
+
+      if (!usuario) return sendError(res, `Credenciales inválidas.`, 400);
 
       sendSuccess(res, usuario);
     } catch (error: any) {

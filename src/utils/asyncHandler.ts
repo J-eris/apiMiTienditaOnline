@@ -14,7 +14,7 @@ export const sendSuccess = (
 
 export const sendError = (
   res: Response,
-  message: string = "Internal Server Error",
+  message: string = "Error en el servidor.",
   statusCode: number = 500
 ) => {
   res.status(statusCode).json({

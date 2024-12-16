@@ -20,10 +20,12 @@ export class ClienteController {
         parseInt(req.params.id)
       );
 
-      if (!cliente) {
-        sendError(res, `Cliente con id ${req.params.id} no encontrado.`, 404);
-        return;
-      }
+      if (!cliente)
+        return sendError(
+          res,
+          `Cliente con id ${req.params.id} no encontrado.`,
+          404
+        );
 
       sendSuccess(res, cliente);
     } catch (error: any) {
@@ -34,6 +36,9 @@ export class ClienteController {
   async crearCliente(req: Request, res: Response) {
     try {
       const cliente = await clienteService.crearNuevoCliente(req.body);
+
+      if (!cliente) return sendError(res, `Cliente ya existe.`, 400);
+
       sendSuccess(res, cliente, 201);
     } catch (error: any) {
       sendError(res, error.message);
@@ -46,6 +51,13 @@ export class ClienteController {
         parseInt(req.params.id),
         req.body
       );
+
+      if (!clienteActualizado)
+        return sendError(
+          res,
+          `Cliente con id ${req.params.id} no encontrado.`,
+          404
+        );
 
       sendSuccess(res, clienteActualizado);
     } catch (error: any) {
@@ -60,10 +72,12 @@ export class ClienteController {
         req.body
       );
 
-      if (!cliente) {
-        sendError(res, `Cliente con id ${req.params.id} no encontrado.`, 404);
-        return;
-      }
+      if (!cliente)
+        return sendError(
+          res,
+          `Cliente con id ${req.params.id} no encontrado.`,
+          404
+        );
 
       sendSuccess(res, cliente);
     } catch (error: any) {
