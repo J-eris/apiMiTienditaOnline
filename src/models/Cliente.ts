@@ -5,16 +5,19 @@ import {
   PrimaryKey,
   AutoIncrement,
   ForeignKey,
+  BelongsTo,
+  AllowNull,
 } from "sequelize-typescript";
 import { Estado } from "./Estado";
 
-@Table
+@Table({ tableName: "clientes", timestamps: false })
 export class Cliente extends Model<Cliente> {
   @PrimaryKey
   @AutoIncrement
   @Column
   idClientes!: number;
 
+  @AllowNull(false)
   @Column
   razon_social!: string;
 
@@ -33,4 +36,7 @@ export class Cliente extends Model<Cliente> {
   @ForeignKey(() => Estado)
   @Column
   estado_idestado!: number;
+
+  @BelongsTo(() => Estado)
+  estado!: Estado;
 }

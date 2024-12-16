@@ -1,87 +1,20 @@
-import sequelize from "../config/database";
+import { ejecutarSP } from "../utils/dbUtils";
 import { IUsuario } from "../interfaces/IUsuario";
-import { comparePassword, hashPassword } from "../utils/hash";
-import { QueryTypes } from "sequelize";
+import { hashPassword } from "../utils/hash";
 import { Usuario } from "../models/Usuario";
-import { generateToken } from "../utils/jwt";
-import { ILoginResponse } from "../interfaces/ILogin";
 
 class UsuarioService {
-  private async ejecutarSP(
-    spName: string,
-    params: { [key: string]: any }
-  ): Promise<any> {
-    const formattedParams = Object.entries(params)
-      .map(([key, value]) =>
-        value !== null && value !== undefined
-          ? `@${key}='${value}'`
-          : `@${key}=NULL`
-      )
-      .join(", ");
-    const query = `EXEC ${spName} ${formattedParams}`;
-    return await sequelize.query(query, { type: QueryTypes.RAW });
-  }
-
-  async registrarNuevoUsuario(
-    data: Omit<
-      IUsuario,
-      "idusuarios" | "fecha_creacion" | "fecha_actualizacion"
-    >
-  ): Promise<IUsuario | null> {
-    const usuarioExistente = await this.encontrarPorCorreo(
-      data.correo_electronico
-    );
-    if (usuarioExistente) throw new Error("Usuario ya existe.");
-
-    const hashedPassword = await hashPassword(data.password);
-    const result = await this.ejecutarSP("InsertUsuario", {
-      correo_electronico: data.correo_electronico,
-      password: hashedPassword,
-      nombre_completo: data.nombre_completo || null,
-      telefono: data.telefono || null,
-      fecha_nacimiento: data.fecha_nacimiento || null,
-      estado_idestado: data.estado_idestado || null,
-      rol_idrol: data.rol_idrol || null,
-      Clientes_idClientes: data.Clientes_idClientes || null,
-    });
-
-    if (!result[0][0].idusuarios)
-      throw new Error("No se pudo registrar el usuario.");
-
-    return (await this.encontrarPorId(result[0][0].idusuarios)) as IUsuario;
-  }
-
-  async loginUsuario(
-    email: string,
-    password: string
-  ): Promise<ILoginResponse | null> {
-    const result = await Usuario.findOne({
-      where: { correo_electronico: email },
-    });
-
-    if (!result) throw new Error("Credenciales inválidas.");
-
-    const passwordIsCorrect = await comparePassword(password, result.password);
-
-    if (!passwordIsCorrect) return null;
-
-    const token = generateToken({ id: result.idusuarios });
-    const { password: _, ...usuarioSinPassword } = result.toJSON();
-    const data = {
-      token,
-      usuario: usuarioSinPassword as IUsuario,
-    };
-
-    return data as ILoginResponse;
-  }
-
   async listarTodosUsuarios(): Promise<IUsuario[]> {
-    const usuarios = await Usuario.findAll();
+    const usuarios = await Usuario.findAll({
+      include: ["estado", "rol", "cliente"],
+    });
     return usuarios as IUsuario[];
   }
 
   async encontrarPorId(id: number): Promise<IUsuario | null> {
-    const usuario = await Usuario.findByPk(id);
+    const usuario = await Usuario.findByPk(id, {
+      include: ["estado", "rol", "cliente"],
+    });
 
     if (!usuario) {
       return null;
@@ -116,7 +49,7 @@ class UsuarioService {
       ? await hashPassword(data.password)
       : usuarioActual.password;
 
-    await this.ejecutarSP("UpdateUsuario", {
+    await ejecutarSP("UpdateUsuario", {
       idusuarios: id || usuarioActual.idusuarios,
       correo_electronico:
         data.correo_electronico || usuarioActual.correo_electronico,
@@ -143,7 +76,7 @@ class UsuarioService {
       throw new Error("Usuario no encontrado.");
     }
 
-    await this.ejecutarSP("SetEstadoUsuario", {
+    await ejecutarSP("SetEstadoUsuario", {
       idUsuario: id,
       estado: data.estado_idestado,
     });

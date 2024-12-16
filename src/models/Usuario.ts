@@ -7,6 +7,7 @@ import {
   Unique,
   AllowNull,
   ForeignKey,
+  BelongsTo,
 } from "sequelize-typescript";
 import { Estado } from "./Estado";
 import { Rol } from "./Rol";
@@ -47,11 +48,27 @@ export class Usuario extends Model {
   @Column
   estado_idestado!: number;
 
+  @BelongsTo(() => Estado)
+  estado!: Estado;
+
   @ForeignKey(() => Rol)
   @Column
   rol_idrol!: number;
 
+  @BelongsTo(() => Rol)
+  rol!: Rol;
+
   @ForeignKey(() => Cliente)
   @Column
   Clientes_idClientes!: number;
+
+  @BelongsTo(() => Cliente)
+  cliente!: Cliente;
+
+  toJSON() {
+    const values = Object.assign({}, this.get());
+
+    delete values.password;
+    return values;
+  }
 }

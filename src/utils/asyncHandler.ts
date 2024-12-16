@@ -1,7 +1,11 @@
 import { Request, Response } from "express";
 
-export const sendSuccess = (res: Response, data: any) => {
-  res.status(200).json({
+export const sendSuccess = (
+  res: Response,
+  data: any,
+  statusCode: number = 200
+) => {
+  res.status(statusCode).json({
     success: true,
     data: data,
     error: null,
