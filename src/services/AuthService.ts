@@ -1,8 +1,8 @@
 import { IUsuario } from "../interfaces/IUsuario";
 import { IUsuarioResponse } from "../interfaces/IUsuarioResponse";
 import { Usuario } from "../models/Usuario";
-import { comparePassword, hashPassword } from "../utils/hash";
-import { generateToken } from "../utils/jwt";
+import { compararPassword, hashPassword } from "../utils/hash";
+import { generarToken } from "../utils/jwt";
 import { ILoginResponse } from "../interfaces/ILogin";
 import { ejecutarSP } from "../utils/dbUtils";
 
@@ -46,11 +46,14 @@ class AuthService {
 
     if (!usuario) return null;
 
-    const passwordIsCorrect = await comparePassword(password, usuario.password);
+    const passwordIsCorrect = await compararPassword(
+      password,
+      usuario.password
+    );
 
     if (!passwordIsCorrect) return null;
 
-    const token = generateToken({ id: usuario.idusuarios });
+    const token = generarToken({ id: usuario.idusuarios });
     const data = {
       token,
       usuario: usuario as IUsuarioResponse,

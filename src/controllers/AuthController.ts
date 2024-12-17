@@ -29,6 +29,14 @@ class AuthController {
       sendError(res, error.message);
     }
   };
+
+  logoutUsuario = async (req: Request, res: Response) => {
+    try {
+      sendSuccess(res, "Logout exitoso.");
+    } catch (error: any) {
+      sendError(res, error.message);
+    }
+  };
 }
 
 export default new AuthController();

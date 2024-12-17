@@ -5,7 +5,7 @@ const hashPassword = async (password: string): Promise<string> => {
   return passwordHash;
 };
 
-const comparePassword = async (
+const compararPassword = async (
   password: string,
   hash: string
 ): Promise<boolean> => {
@@ -13,4 +13,4 @@ const comparePassword = async (
   return passwordIsCorrect;
 };
 
-export { hashPassword, comparePassword };
+export { hashPassword, compararPassword };

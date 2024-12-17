@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { verifyToken } from "../utils/jwt";
+import { verificarToken } from "../utils/jwt";
 
 export const authenticate = (
   req: Request,
@@ -13,7 +13,7 @@ export const authenticate = (
   }
 
   try {
-    const decoded = verifyToken(token);
+    const decoded = verificarToken(token);
     (req as any).user = decoded;
     next();
   } catch (ex) {

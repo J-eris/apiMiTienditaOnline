@@ -13,7 +13,7 @@ usuarioRouter.get(
 );
 usuarioRouter.patch("/:id", authenticate, usuarioController.actualizarUsuario);
 usuarioRouter.patch(
-  "/cambiar-estado/:id",
+  "/estado/:id",
   authenticate,
   usuarioController.inactivarUsuario
 );

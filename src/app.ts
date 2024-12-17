@@ -2,14 +2,15 @@ import express from "express";
 import sequelize from "./config/database";
 import routes from "./routes/index";
 import dotenv from "dotenv";
-import cors from "cors";
 import { errorMiddleware } from "./middleware/errorMiddleware";
+import corsConfig from "./config/corsConfig";
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+
+app.use(corsConfig);
 
 app.use("/api", routes);
 
@@ -17,7 +18,7 @@ app.use(errorMiddleware);
 
 const PORT = process.env.PORT || 3000;
 
-const start = async () => {
+(async () => {
   try {
     await sequelize.authenticate();
     console.log("Conexión a la base de datos establecida exitosamente.");
@@ -26,6 +27,4 @@ const start = async () => {
   } catch (error) {
     console.error("Error al iniciar el servidor:", error);
   }
-};
-
-start();
+})();
