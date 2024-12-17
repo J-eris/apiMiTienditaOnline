@@ -5,14 +5,14 @@ import { sendError, sendSuccess } from "../utils/asyncHandler";
 const clienteService = new ClienteService();
 
 export class ClienteController {
-  async listarClientes(req: Request, res: Response) {
+  listarClientes = async (req: Request, res: Response) => {
     try {
       const clientes = await clienteService.listarTodosClientes();
       sendSuccess(res, clientes);
     } catch (error: any) {
       sendError(res, error.message);
     }
-  }
+  };
 
   async buscarPorId(req: Request, res: Response) {
     try {

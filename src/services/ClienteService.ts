@@ -28,7 +28,7 @@ export class ClienteService {
       estado_idestado: data.estado_idestado || null,
     });
 
-    // if (!cliente[0][0].idClientes) return null;
+    if (!cliente[0][0].idClientes) throw new Error("No se pudo crear el cliente.");
 
     return (await Cliente.findByPk(cliente[0][0].idClientes)) as ICliente;
   };

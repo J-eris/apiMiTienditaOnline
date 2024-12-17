@@ -3,16 +3,16 @@ import usuarioService from "../services/UsuarioService";
 import { sendError, sendSuccess } from "../utils/asyncHandler";
 
 class UsuarioController {
-  async listarUsuarios(req: Request, res: Response) {
+  listarUsuarios = async (req: Request, res: Response) => {
     try {
       const usuarios = await usuarioService.listarTodosUsuarios();
       sendSuccess(res, usuarios);
     } catch (error: any) {
       sendError(res, error.message);
     }
-  }
+  };
 
-  async buscarPorId(req: Request, res: Response) {
+  buscarPorId = async (req: Request, res: Response) => {
     try {
       const usuario = await usuarioService.encontrarPorId(
         parseInt(req.params.id)
@@ -27,9 +27,9 @@ class UsuarioController {
     } catch (error: any) {
       sendError(res, error.message);
     }
-  }
+  };
 
-  async buscarPorCorreo(req: Request, res: Response) {
+  buscarPorCorreo = async (req: Request, res: Response) => {
     try {
       const usuario = await usuarioService.encontrarPorCorreo(
         req.params.correo
@@ -48,9 +48,9 @@ class UsuarioController {
     } catch (error: any) {
       sendError(res, error.message);
     }
-  }
+  };
 
-  async actualizarUsuario(req: Request, res: Response) {
+  actualizarUsuario = async (req: Request, res: Response) => {
     try {
       const usuarioActualizado = await usuarioService.actualizarUsuario(
         parseInt(req.params.id),
@@ -68,9 +68,9 @@ class UsuarioController {
     } catch (error: any) {
       sendError(res, error.message);
     }
-  }
+  };
 
-  async inactivarUsuario(req: Request, res: Response) {
+  inactivarUsuario = async (req: Request, res: Response) => {
     try {
       const estadoActualizado = await usuarioService.cambiarEstadoUsuario(
         parseInt(req.params.id),
@@ -86,7 +86,7 @@ class UsuarioController {
     } catch (error: any) {
       sendError(res, error.message);
     }
-  }
+  };
 }
 
 export default new UsuarioController();

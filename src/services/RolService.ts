@@ -22,7 +22,7 @@ export class RolService {
       nombre: data.nombre,
     });
 
-    // if (!rol[0][0].idrol) throw new Error("No se pudo crear el rol.");
+    if (!rol[0][0].idrol) throw new Error("No se pudo crear el rol.");
 
     return (await Rol.findByPk(rol[0][0].idrol)) as IRol;
   };
@@ -39,7 +39,7 @@ export class RolService {
       idrol: id,
       nombre: data.nombre || rolActual.nombre,
     });
-
+    
     return (await this.encontrarPorId(id)) as IRol;
   };
 }

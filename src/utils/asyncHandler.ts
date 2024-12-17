@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-export const sendSuccess = (
+const sendSuccess = (
   res: Response,
   data: any,
   statusCode: number = 200
@@ -12,7 +12,7 @@ export const sendSuccess = (
   });
 };
 
-export const sendError = (
+const sendError = (
   res: Response,
   message: string = "Error en el servidor.",
   statusCode: number = 500
@@ -25,3 +25,5 @@ export const sendError = (
     },
   });
 };
+
+export { sendSuccess, sendError };

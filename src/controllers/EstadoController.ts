@@ -5,16 +5,16 @@ import { sendError, sendSuccess } from "../utils/asyncHandler";
 const estadoService = new EstadoService();
 
 export class EstadoController {
-  async listarEstados(req: Request, res: Response) {
+  listarEstados = async (req: Request, res: Response) => {
     try {
       const estados = await estadoService.listarTodosEstados();
       sendSuccess(res, estados);
     } catch (error: any) {
       sendError(res, error.message);
     }
-  }
+  };
 
-  async buscarPorId(req: Request, res: Response) {
+  buscarPorId = async (req: Request, res: Response) => {
     try {
       const estado = await estadoService.encontrarPorId(
         parseInt(req.params.id)
@@ -31,9 +31,9 @@ export class EstadoController {
     } catch (error: any) {
       sendError(res, error.message);
     }
-  }
+  };
 
-  async crearEstado(req: Request, res: Response) {
+  crearEstado = async (req: Request, res: Response) => {
     try {
       const estado = await estadoService.crearNuevoEstado(req.body);
 
@@ -43,9 +43,9 @@ export class EstadoController {
     } catch (error: any) {
       sendError(res, error.message);
     }
-  }
+  };
 
-  async actualizarEstado(req: Request, res: Response) {
+  actualizarEstado = async (req: Request, res: Response) => {
     try {
       const estadoActualizado = await estadoService.actualizarEstado(
         parseInt(req.params.id),
@@ -63,5 +63,5 @@ export class EstadoController {
     } catch (error: any) {
       sendError(res, error.message);
     }
-  }
+  };
 }

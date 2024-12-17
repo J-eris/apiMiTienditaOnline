@@ -3,7 +3,7 @@ import authService from "../services/AuthService";
 import { sendSuccess, sendError } from "../utils/asyncHandler";
 
 class AuthController {
-  async registrarUsuario(req: Request, res: Response) {
+  registrarUsuario = async (req: Request, res: Response) => {
     try {
       const usuario = await authService.registrarNuevoUsuario(req.body);
 
@@ -13,9 +13,9 @@ class AuthController {
     } catch (error: any) {
       sendError(res, error.message);
     }
-  }
+  };
 
-  async loginUsuario(req: Request, res: Response) {
+  loginUsuario = async (req: Request, res: Response) => {
     try {
       const usuario = await authService.loginUsuario(
         req.body.email,
@@ -28,7 +28,7 @@ class AuthController {
     } catch (error: any) {
       sendError(res, error.message);
     }
-  }
+  };
 }
 
 export default new AuthController();

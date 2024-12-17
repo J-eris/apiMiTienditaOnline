@@ -5,16 +5,16 @@ import { sendError, sendSuccess } from "../utils/asyncHandler";
 const rolService = new RolService();
 
 export class RolController {
-  async listarRoles(req: Request, res: Response) {
+  listarRoles = async (req: Request, res: Response) => {
     try {
       const roles = await rolService.listarTodosRoles();
       sendSuccess(res, roles);
     } catch (error: any) {
       sendError(res, error.message);
     }
-  }
+  };
 
-  async buscarPorId(req: Request, res: Response) {
+  buscarPorId = async (req: Request, res: Response) => {
     try {
       const rol = await rolService.encontrarPorId(parseInt(req.params.id));
 
@@ -29,9 +29,9 @@ export class RolController {
     } catch (error: any) {
       sendError(res, error.message);
     }
-  }
+  };
 
-  async crearRol(req: Request, res: Response) {
+  crearRol = async (req: Request, res: Response) => {
     try {
       const rol = await rolService.crearNuevoRol(req.body);
 
@@ -41,9 +41,9 @@ export class RolController {
     } catch (error: any) {
       sendError(res, error.message);
     }
-  }
+  };
 
-  async actualizarRol(req: Request, res: Response) {
+  actualizarRol = async (req: Request, res: Response) => {
     try {
       const rolActualizado = await rolService.actualizarRol(
         parseInt(req.params.id),
@@ -61,5 +61,5 @@ export class RolController {
     } catch (error: any) {
       sendError(res, error.message);
     }
-  }
+  };
 }
