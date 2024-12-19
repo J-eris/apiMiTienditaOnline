@@ -11,12 +11,14 @@ export class EstadoService {
     return await Estado.findByPk(id);
   };
 
+  encontrarPorNombre = async (nombre: string): Promise<IEstado | null> => {
+    return await Estado.findOne({ where: { nombre } });
+  };
+
   crearNuevoEstado = async (
     data: Omit<IEstado, "idestado">
   ): Promise<IEstado | null> => {
-    const estadoExistente = await Estado.findOne({
-      where: { nombre: data.nombre },
-    });
+    const estadoExistente = await this.encontrarPorNombre(data.nombre);
     if (estadoExistente) return null;
 
     const estado = await ejecutarSP("InsertEstado", {
@@ -25,7 +27,7 @@ export class EstadoService {
 
     if (!estado[0][0].idestado) throw new Error("No se pudo crear el estado.");
 
-    return (await Estado.findByPk(estado[0][0].idestado)) as IEstado;
+    return (await this.encontrarPorId(estado[0][0].idestado)) as IEstado;
   };
 
   actualizarEstado = async (

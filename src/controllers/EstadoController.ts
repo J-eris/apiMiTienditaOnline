@@ -35,11 +35,16 @@ export class EstadoController {
 
   crearEstado = async (req: Request, res: Response) => {
     try {
-      const estado = await estadoService.crearNuevoEstado(req.body);
+      const { body } = req;
 
-      if (!estado) return sendError(res, `Estado ya existe.`, 400);
+      if (!body.nombre)
+        return sendError(res, "Nombre de estado no especificado.", 400);
 
-      sendSuccess(res, estado, 201);
+      const nuevoEstado = await estadoService.crearNuevoEstado(body);
+
+      if (!nuevoEstado) return sendError(res, `Estado ya existe.`, 400);
+
+      sendSuccess(res, nuevoEstado, 201);
     } catch (error: any) {
       sendError(res, error.message);
     }
@@ -47,9 +52,21 @@ export class EstadoController {
 
   actualizarEstado = async (req: Request, res: Response) => {
     try {
+      const {
+        body,
+        params: { id },
+      } = req;
+
+      if (!body.nombre)
+        return sendError(
+          res,
+          "Datos incompletos para actualizar el estado.",
+          400
+        );
+
       const estadoActualizado = await estadoService.actualizarEstado(
-        parseInt(req.params.id),
-        req.body
+        parseInt(id),
+        body
       );
 
       if (!estadoActualizado)

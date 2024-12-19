@@ -52,9 +52,21 @@ class UsuarioController {
 
   actualizarUsuario = async (req: Request, res: Response) => {
     try {
+      const {
+        body,
+        params: { id },
+      } = req;
+
+      if (!body.correo_electronico || !body.password)
+        return sendError(
+          res,
+          "Datos incompletos para actualizar el usuario.",
+          400
+        );
+
       const usuarioActualizado = await usuarioService.actualizarUsuario(
-        parseInt(req.params.id),
-        req.body
+        parseInt(id),
+        body
       );
 
       if (!usuarioActualizado)

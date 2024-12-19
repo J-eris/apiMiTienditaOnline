@@ -4,33 +4,42 @@ import { ejecutarSP } from "../utils/dbUtils";
 
 export class ClienteService {
   listarTodosClientes = async (): Promise<ICliente[]> => {
-    return await Cliente.findAll();
+    return await Cliente.findAll({
+      include: ["estado"],
+    });
   };
 
   encontrarPorId = async (id: number): Promise<ICliente | null> => {
-    return await Cliente.findByPk(id);
+    return await Cliente.findByPk(id, { include: ["estado"] });
+  };
+
+  encontrarPorRazonSocial = async (
+    razon_social: string
+  ): Promise<ICliente | null> => {
+    return await Cliente.findOne({ where: { razon_social } });
   };
 
   crearNuevoCliente = async (
     data: Omit<ICliente, "idClientes">
   ): Promise<ICliente | null> => {
-    const clienteExistente = await Cliente.findOne({
-      where: { razon_social: data.razon_social },
-    });
+    const clienteExistente = await this.encontrarPorRazonSocial(
+      data.razon_social
+    );
     if (clienteExistente) return null;
 
     const cliente = await ejecutarSP("InsertCliente", {
       razon_social: data.razon_social,
-      nombre_comercial: data.nombre_comercial || null,
-      direccion_entrega: data.direccion_entrega || null,
-      email: data.email || null,
-      telefono: data.telefono || null,
-      estado_idestado: data.estado_idestado || null,
+      nombre_comercial: data.nombre_comercial,
+      direccion_entrega: data.direccion_entrega,
+      email: data.email,
+      telefono: data.telefono,
+      estado_idestado: data.estado_idestado,
     });
 
-    if (!cliente[0][0].idClientes) throw new Error("No se pudo crear el cliente.");
+    if (!cliente[0][0].idClientes)
+      throw new Error("No se pudo crear el cliente.");
 
-    return (await Cliente.findByPk(cliente[0][0].idClientes)) as ICliente;
+    return (await this.encontrarPorId(cliente[0][0].idClientes)) as ICliente;
   };
 
   actualizarCliente = async (

@@ -33,11 +33,15 @@ export class RolController {
 
   crearRol = async (req: Request, res: Response) => {
     try {
-      const rol = await rolService.crearNuevoRol(req.body);
+      const { nombre } = req.body;
 
-      if (!rol) return sendError(res, `Rol ya existe.`, 400);
+      if (!nombre) return sendError(res, "Nombre de rol no especificado.", 400);
 
-      sendSuccess(res, rol, 201);
+      const nuevoRol = await rolService.crearNuevoRol(req.body);
+
+      if (!nuevoRol) return sendError(res, "Rol ya existe.", 400);
+
+      sendSuccess(res, nuevoRol, 201);
     } catch (error: any) {
       sendError(res, error.message);
     }
@@ -45,10 +49,15 @@ export class RolController {
 
   actualizarRol = async (req: Request, res: Response) => {
     try {
-      const rolActualizado = await rolService.actualizarRol(
-        parseInt(req.params.id),
-        req.body
-      );
+      const {
+        body,
+        params: { id },
+      } = req;
+
+      if (!body.nombre)
+        return sendError(res, "Nombre de rol no especificado.", 400);
+
+      const rolActualizado = await rolService.actualizarRol(parseInt(id), body);
 
       if (!rolActualizado)
         return sendError(

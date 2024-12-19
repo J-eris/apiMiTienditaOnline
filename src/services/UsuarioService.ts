@@ -6,6 +6,7 @@ import { Usuario } from "../models/Usuario";
 class UsuarioService {
   listarTodosUsuarios = async (): Promise<IUsuario[]> => {
     const usuarios = await Usuario.findAll({
+      attributes: { exclude: ["password"] },
       include: ["estado", "rol", "cliente"],
     });
     return usuarios as IUsuario[];
@@ -13,6 +14,7 @@ class UsuarioService {
 
   encontrarPorId = async (id: number): Promise<IUsuario | null> => {
     const usuario = await Usuario.findByPk(id, {
+      attributes: { exclude: ["password"] },
       include: ["estado", "rol", "cliente"],
     });
 
@@ -23,6 +25,7 @@ class UsuarioService {
 
   encontrarPorCorreo = async (correo: string): Promise<IUsuario | null> => {
     const result = await Usuario.findOne({
+      attributes: { exclude: ["password"] },
       where: { correo_electronico: correo },
     });
 

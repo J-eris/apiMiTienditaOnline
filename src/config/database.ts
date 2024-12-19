@@ -4,6 +4,13 @@ import { Usuario } from "../models/Usuario";
 import { Estado } from "../models/Estado";
 import { Rol } from "../models/Rol";
 import { Cliente } from "../models/Cliente";
+import { Producto } from "../models/Producto";
+import { CategoriaProducto } from "../models/CategoriaProducto";
+import { ProductoImagen } from "../models/ProductoImagen";
+import { Orden } from "../models/Orden";
+import { OrdenDetalles } from "../models/OrdenDetalles";
+import { Carrito } from "../models/Carrito";
+import { CarritoDetalles } from "../models/CarritoDetalles";
 
 dotenv.config();
 
@@ -24,6 +31,18 @@ const sequelize = new Sequelize({
   logging: false,
 });
 
-sequelize.addModels([Usuario, Estado, Rol, Cliente]);
+sequelize.addModels([
+  Usuario,
+  Estado,
+  Rol,
+  Cliente,
+  Producto,
+  CategoriaProducto,
+  ProductoImagen,
+  Orden,
+  OrdenDetalles,
+  Carrito,
+  CarritoDetalles,
+]);
 
 export default sequelize;

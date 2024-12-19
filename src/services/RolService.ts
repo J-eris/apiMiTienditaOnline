@@ -14,8 +14,12 @@ export class RolService {
     return rol as IRol;
   };
 
+  encontrarPorNombre = async (nombre: string): Promise<IRol | null> => {
+    return await Rol.findOne({ where: { nombre } });
+  };
+
   crearNuevoRol = async (data: Omit<IRol, "idrol">): Promise<IRol | null> => {
-    const rolExistente = await Rol.findOne({ where: { nombre: data.nombre } });
+    const rolExistente = await this.encontrarPorNombre(data.nombre);
     if (rolExistente) return null;
 
     const rol = await ejecutarSP("InsertRol", {
@@ -24,7 +28,7 @@ export class RolService {
 
     if (!rol[0][0].idrol) throw new Error("No se pudo crear el rol.");
 
-    return (await Rol.findByPk(rol[0][0].idrol)) as IRol;
+    return (await this.encontrarPorId(rol[0][0].idrol)) as IRol;
   };
 
   actualizarRol = async (
@@ -39,7 +43,7 @@ export class RolService {
       idrol: id,
       nombre: data.nombre || rolActual.nombre,
     });
-    
+
     return (await this.encontrarPorId(id)) as IRol;
   };
 }

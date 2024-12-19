@@ -35,11 +35,16 @@ export class ClienteController {
 
   async crearCliente(req: Request, res: Response) {
     try {
-      const cliente = await clienteService.crearNuevoCliente(req.body);
+      const { body } = req;
 
-      if (!cliente) return sendError(res, `Cliente ya existe.`, 400);
+      if (!body.razon_social)
+        return sendError(res, "Razón social no especificada.", 400);
 
-      sendSuccess(res, cliente, 201);
+      const nuevoCliente = await clienteService.crearNuevoCliente(body);
+
+      if (!nuevoCliente) return sendError(res, `Cliente ya existe.`, 400);
+
+      sendSuccess(res, nuevoCliente, 201);
     } catch (error: any) {
       sendError(res, error.message);
     }
@@ -47,9 +52,17 @@ export class ClienteController {
 
   async actualizarCliente(req: Request, res: Response) {
     try {
+      const {
+        body,
+        params: { id },
+      } = req;
+
+      if (!body.razon_social)
+        return sendError(res, "Razón social no especificada.", 400);
+
       const clienteActualizado = await clienteService.actualizarCliente(
-        parseInt(req.params.id),
-        req.body
+        parseInt(id),
+        body
       );
 
       if (!clienteActualizado)

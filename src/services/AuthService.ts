@@ -5,6 +5,7 @@ import { compararPassword, hashPassword } from "../utils/hash";
 import { generarToken } from "../utils/jwt";
 import { ILoginResponse } from "../interfaces/ILogin";
 import { ejecutarSP } from "../utils/dbUtils";
+import UsuarioService from "./UsuarioService";
 
 class AuthService {
   registrarNuevoUsuario = async (
@@ -33,7 +34,9 @@ class AuthService {
     if (!result[0][0].idusuarios)
       throw new Error("No se pudo registrar el usuario.");
 
-    return (await Usuario.findByPk(result[0][0].idusuarios)) as IUsuario;
+    return (await UsuarioService.encontrarPorId(
+      result[0][0].idusuarios
+    )) as IUsuario;
   };
 
   loginUsuario = async (
