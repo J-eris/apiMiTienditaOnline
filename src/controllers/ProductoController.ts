@@ -12,9 +12,9 @@ export class ProductoController {
     }
   };
 
-  buscarPorId = async (req: Request, res: Response) => {
+  buscarProductoPorId = async (req: Request, res: Response) => {
     try {
-      const producto = await productoService.encontrarPorId(
+      const producto = await productoService.encontrarProductoPorId(
         parseInt(req.params.id)
       );
 
@@ -31,14 +31,35 @@ export class ProductoController {
     }
   };
 
-  crearProducto = async (req: Request, res: Response) => {
-    const { body } = req;
-
-    if (!body.nombre || !body.codigo)
-      return sendError(res, "Datos incompletos para crear el producto.", 400);
-
+  buscarImagenPorId = async (req: Request, res: Response) => {
     try {
-      const nuevoProducto = await productoService.crearNuevoProducto(body);
+      const imagen = await productoService.encontrarImagenPorId(
+        parseInt(req.params.id)
+      );
+
+      if (!imagen)
+        return sendError(
+          res,
+          `Imagen con id ${req.params.id} no encontrada.`,
+          404
+        );
+
+      sendSuccess(res, imagen);
+    } catch (error: any) {
+      sendError(res, error.message);
+    }
+  };
+
+  crearProducto = async (req: Request, res: Response) => {
+    try {
+      const { body } = req;
+
+      if (!body.nombre || !body.codigo)
+        return sendError(res, "Datos incompletos para crear el producto.", 400);
+
+      const nuevoProducto = await productoService.crearProductoConImagenes(
+        body
+      );
 
       if (!nuevoProducto) return sendError(res, `Producto ya existe.`, 400);
 
@@ -80,6 +101,34 @@ export class ProductoController {
     }
   };
 
+  actualizarImagenProducto = async (req: Request, res: Response) => {
+    const {
+      body,
+      params: { id },
+    } = req;
+
+    if (!body.ruta_imagen)
+      return sendError(res, "Ruta de imagen requerida.", 400);
+
+    try {
+      const imagenActualizada = await productoService.actualizarProductoImagen(
+        parseInt(id),
+        body
+      );
+
+      if (!imagenActualizada)
+        return sendError(
+          res,
+          `Imagen con id ${req.params.id} no encontrada.`,
+          404
+        );
+
+      sendSuccess(res, imagenActualizada);
+    } catch (error: any) {
+      sendError(res, error.message);
+    }
+  };
+
   cambiarEstadoProducto = async (req: Request, res: Response) => {
     try {
       const producto = await productoService.cambiarEstadoProducto(
@@ -95,6 +144,25 @@ export class ProductoController {
         );
 
       sendSuccess(res, producto);
+    } catch (error: any) {
+      sendError(res, error.message);
+    }
+  };
+
+  eliminarImagenProducto = async (req: Request, res: Response) => {
+    try {
+      const imagen = await productoService.eliminarImagenProducto(
+        parseInt(req.params.id)
+      );
+
+      if (!imagen)
+        return sendError(
+          res,
+          `Imagen con id ${req.params.id} no encontrada.`,
+          404
+        );
+
+      sendSuccess(res, imagen);
     } catch (error: any) {
       sendError(res, error.message);
     }

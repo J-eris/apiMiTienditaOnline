@@ -12,7 +12,7 @@ class UsuarioService {
     return usuarios as IUsuario[];
   };
 
-  encontrarPorId = async (id: number): Promise<IUsuario | null> => {
+  encontrarUsuarioPorId = async (id: number): Promise<IUsuario | null> => {
     const usuario = await Usuario.findByPk(id, {
       attributes: { exclude: ["password"] },
       include: ["estado", "rol", "cliente"],
@@ -23,7 +23,9 @@ class UsuarioService {
     return usuario as IUsuario;
   };
 
-  encontrarPorCorreo = async (correo: string): Promise<IUsuario | null> => {
+  encontrarUsuarioPorCorreo = async (
+    correo: string
+  ): Promise<IUsuario | null> => {
     const result = await Usuario.findOne({
       attributes: { exclude: ["password"] },
       where: { correo_electronico: correo },
@@ -38,7 +40,7 @@ class UsuarioService {
     id: number,
     data: Partial<IUsuario>
   ): Promise<IUsuario | null> => {
-    const usuarioActual = await this.encontrarPorId(id);
+    const usuarioActual = await this.encontrarUsuarioPorId(id);
 
     if (!usuarioActual) return null;
 
@@ -60,14 +62,14 @@ class UsuarioService {
         data.Clientes_idClientes || usuarioActual.Clientes_idClientes,
     });
 
-    return (await this.encontrarPorId(id)) as IUsuario;
+    return (await this.encontrarUsuarioPorId(id)) as IUsuario;
   };
 
   cambiarEstadoUsuario = async (
     id: number,
     data: Partial<IUsuario>
   ): Promise<IUsuario | null> => {
-    const usuarioActual = await this.encontrarPorId(id);
+    const usuarioActual = await this.encontrarUsuarioPorId(id);
 
     if (!usuarioActual) return null;
 
@@ -76,7 +78,7 @@ class UsuarioService {
       estado: data.estado_idestado,
     });
 
-    return (await this.encontrarPorId(id)) as IUsuario;
+    return (await this.encontrarUsuarioPorId(id)) as IUsuario;
   };
 }
 

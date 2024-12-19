@@ -7,18 +7,20 @@ export class EstadoService {
     return await Estado.findAll();
   }
 
-  encontrarPorId = async (id: number): Promise<IEstado | null> => {
+  encontrarEstadoPorId = async (id: number): Promise<IEstado | null> => {
     return await Estado.findByPk(id);
   };
 
-  encontrarPorNombre = async (nombre: string): Promise<IEstado | null> => {
+  encontrarEstadoPorNombre = async (
+    nombre: string
+  ): Promise<IEstado | null> => {
     return await Estado.findOne({ where: { nombre } });
   };
 
   crearNuevoEstado = async (
     data: Omit<IEstado, "idestado">
   ): Promise<IEstado | null> => {
-    const estadoExistente = await this.encontrarPorNombre(data.nombre);
+    const estadoExistente = await this.encontrarEstadoPorNombre(data.nombre);
     if (estadoExistente) return null;
 
     const estado = await ejecutarSP("InsertEstado", {
@@ -27,14 +29,14 @@ export class EstadoService {
 
     if (!estado[0][0].idestado) throw new Error("No se pudo crear el estado.");
 
-    return (await this.encontrarPorId(estado[0][0].idestado)) as IEstado;
+    return (await this.encontrarEstadoPorId(estado[0][0].idestado)) as IEstado;
   };
 
   actualizarEstado = async (
     id: number,
     data: Partial<IEstado>
   ): Promise<IEstado | null> => {
-    const estadoActual = await this.encontrarPorId(id);
+    const estadoActual = await this.encontrarEstadoPorId(id);
 
     if (!estadoActual) return null;
 
@@ -43,6 +45,6 @@ export class EstadoService {
       nombre: data.nombre || estadoActual.nombre,
     });
 
-    return (await this.encontrarPorId(id)) as IEstado;
+    return (await this.encontrarEstadoPorId(id)) as IEstado;
   };
 }

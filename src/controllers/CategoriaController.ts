@@ -12,9 +12,9 @@ export class CategoriaController {
     }
   };
 
-  buscarPorId = async (req: Request, res: Response) => {
+  buscarCategoriaPorId = async (req: Request, res: Response) => {
     try {
-      const categoria = await categoriaService.encontrarPorId(
+      const categoria = await categoriaService.encontrarCategoriaPorId(
         parseInt(req.params.id)
       );
 

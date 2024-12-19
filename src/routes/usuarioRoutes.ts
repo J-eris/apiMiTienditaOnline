@@ -5,11 +5,11 @@ import { authenticate } from "../middleware/authMiddleware";
 const usuarioRouter = Router();
 
 usuarioRouter.get("/", authenticate, usuarioController.listarUsuarios);
-usuarioRouter.get("/:id", authenticate, usuarioController.buscarPorId);
+usuarioRouter.get("/:id", authenticate, usuarioController.buscarUsuarioPorId);
 usuarioRouter.get(
   "/correo/:correo",
   authenticate,
-  usuarioController.buscarPorCorreo
+  usuarioController.buscarUsuarioPorCorreo
 );
 usuarioRouter.patch("/:id", authenticate, usuarioController.actualizarUsuario);
 usuarioRouter.patch(

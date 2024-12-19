@@ -14,7 +14,7 @@ export class OrdenService {
     });
   };
 
-  encontrarPorId = async (id: number): Promise<IOrden | null> => {
+  encontrarOrdenPorId = async (id: number): Promise<IOrden | null> => {
     return await Orden.findByPk(id, {
       include: [
         { association: "usuario", attributes: { exclude: ["password"] } },
@@ -55,7 +55,7 @@ export class OrdenService {
 
       const idOrden = ordenResult[0][0].idOrden;
 
-      return await this.encontrarPorId(idOrden);
+      return await this.encontrarOrdenPorId(idOrden);
     } catch (error) {
       throw error;
     }
@@ -65,7 +65,7 @@ export class OrdenService {
     id: number,
     data: Partial<IOrden>
   ): Promise<IOrden | null> => {
-    const ordenActual = await this.encontrarPorId(id);
+    const ordenActual = await this.encontrarOrdenPorId(id);
 
     if (!ordenActual) return null;
 
@@ -81,14 +81,14 @@ export class OrdenService {
       total_orden: data.total_orden,
     });
 
-    return (await this.encontrarPorId(id)) as IOrden;
+    return (await this.encontrarOrdenPorId(id)) as IOrden;
   };
 
   cambiarEstado = async (
     id: number,
     estado_idestado: number
   ): Promise<IOrden | null> => {
-    const ordenActual = await this.encontrarPorId(id);
+    const ordenActual = await this.encontrarOrdenPorId(id);
 
     if (!ordenActual) return null;
 
@@ -97,7 +97,7 @@ export class OrdenService {
       estado: estado_idestado,
     });
 
-    return (await this.encontrarPorId(id)) as IOrden;
+    return (await this.encontrarOrdenPorId(id)) as IOrden;
   };
 }
 

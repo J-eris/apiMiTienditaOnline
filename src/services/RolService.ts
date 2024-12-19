@@ -7,19 +7,19 @@ export class RolService {
     return await Rol.findAll();
   }
 
-  encontrarPorId = async (id: number): Promise<IRol | null> => {
+  encontrarRolPorId = async (id: number): Promise<IRol | null> => {
     const rol = await Rol.findByPk(id);
 
     if (!rol) return null;
     return rol as IRol;
   };
 
-  encontrarPorNombre = async (nombre: string): Promise<IRol | null> => {
+  encontrarRolPorNombre = async (nombre: string): Promise<IRol | null> => {
     return await Rol.findOne({ where: { nombre } });
   };
 
   crearNuevoRol = async (data: Omit<IRol, "idrol">): Promise<IRol | null> => {
-    const rolExistente = await this.encontrarPorNombre(data.nombre);
+    const rolExistente = await this.encontrarRolPorNombre(data.nombre);
     if (rolExistente) return null;
 
     const rol = await ejecutarSP("InsertRol", {
@@ -28,14 +28,14 @@ export class RolService {
 
     if (!rol[0][0].idrol) throw new Error("No se pudo crear el rol.");
 
-    return (await this.encontrarPorId(rol[0][0].idrol)) as IRol;
+    return (await this.encontrarRolPorId(rol[0][0].idrol)) as IRol;
   };
 
   actualizarRol = async (
     id: number,
     data: Partial<IRol>
   ): Promise<IRol | null> => {
-    const rolActual = await this.encontrarPorId(id);
+    const rolActual = await this.encontrarRolPorId(id);
 
     if (!rolActual) return null;
 
@@ -44,6 +44,6 @@ export class RolService {
       nombre: data.nombre || rolActual.nombre,
     });
 
-    return (await this.encontrarPorId(id)) as IRol;
+    return (await this.encontrarRolPorId(id)) as IRol;
   };
 }

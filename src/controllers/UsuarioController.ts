@@ -12,9 +12,9 @@ class UsuarioController {
     }
   };
 
-  buscarPorId = async (req: Request, res: Response) => {
+  buscarUsuarioPorId = async (req: Request, res: Response) => {
     try {
-      const usuario = await usuarioService.encontrarPorId(
+      const usuario = await usuarioService.encontrarUsuarioPorId(
         parseInt(req.params.id)
       );
 
@@ -29,9 +29,9 @@ class UsuarioController {
     }
   };
 
-  buscarPorCorreo = async (req: Request, res: Response) => {
+  buscarUsuarioPorCorreo = async (req: Request, res: Response) => {
     try {
-      const usuario = await usuarioService.encontrarPorCorreo(
+      const usuario = await usuarioService.encontrarUsuarioPorCorreo(
         req.params.correo
       );
 

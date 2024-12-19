@@ -1,3 +1,5 @@
+import { IProductoImagen } from "./IProductoImagen";
+
 export interface IProducto {
   idProductos: number;
   CategoriaProductos_idCategoriaProductos: number;
@@ -10,4 +12,8 @@ export interface IProducto {
   fecha_creacion: Date;
   fecha_actualizacion: Date;
   estado_idestado: number;
+}
+
+export interface IProductoConImagenes extends IProducto {
+  imagenes: IProductoImagen[];
 }

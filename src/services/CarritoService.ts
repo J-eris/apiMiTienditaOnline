@@ -1,8 +1,8 @@
 import { Carrito } from "../models/Carrito";
-import { CarritoDetalles } from "../models/CarritoDetalles";
 import { ICarrito } from "../interfaces/ICarrito";
-import { ICarritoDetalles } from "../interfaces/ICarritoDetalles";
 import { ejecutarSP } from "../utils/dbUtils";
+import { ICarritoDetalles } from "../interfaces/ICarritoDetalles";
+import { ICarritoConDetalles } from "../interfaces/ICarritoConDetalles";
 
 export class CarritoService {
   listarTodosCarritos = async (): Promise<ICarrito[]> => {
@@ -18,7 +18,7 @@ export class CarritoService {
     });
   };
 
-  encontrarPorId = async (id: number): Promise<ICarrito | null> => {
+  encontrarCarritoPorId = async (id: number): Promise<ICarrito | null> => {
     return await Carrito.findByPk(id, {
       include: [
         {
@@ -31,11 +31,9 @@ export class CarritoService {
     });
   };
 
-  crearCarritoConDetalles = async (data: {
-    idUsuario: number;
-    estado_idestado: number;
-    detalles: Omit<ICarritoDetalles, "idCarritoDetalles" | "idCarrito">[];
-  }): Promise<ICarrito | null> => {
+  crearCarritoConDetalles = async (
+    data: Omit<ICarritoConDetalles, "idCarritoDetalles" | "idCarrito">
+  ): Promise<ICarrito | null> => {
     try {
       const detallesJSON = JSON.stringify({ detalles: data.detalles });
 
@@ -50,14 +48,14 @@ export class CarritoService {
 
       const idCarrito = carritoResult[0][0].idCarrito;
 
-      return await this.encontrarPorId(idCarrito);
+      return await this.encontrarCarritoPorId(idCarrito);
     } catch (error) {
       throw error;
     }
   };
 
   eliminarCarrito = async (id: number): Promise<boolean | null> => {
-    const carrito = await this.encontrarPorId(id);
+    const carrito = await this.encontrarCarritoPorId(id);
 
     if (!carrito) return null;
 

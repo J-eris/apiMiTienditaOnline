@@ -9,7 +9,7 @@ export class ClienteService {
     });
   };
 
-  encontrarPorId = async (id: number): Promise<ICliente | null> => {
+  encontrarClientePorId = async (id: number): Promise<ICliente | null> => {
     return await Cliente.findByPk(id, { include: ["estado"] });
   };
 
@@ -39,14 +39,16 @@ export class ClienteService {
     if (!cliente[0][0].idClientes)
       throw new Error("No se pudo crear el cliente.");
 
-    return (await this.encontrarPorId(cliente[0][0].idClientes)) as ICliente;
+    return (await this.encontrarClientePorId(
+      cliente[0][0].idClientes
+    )) as ICliente;
   };
 
   actualizarCliente = async (
     id: number,
     data: Partial<ICliente>
   ): Promise<ICliente | null> => {
-    const clienteActual = await this.encontrarPorId(id);
+    const clienteActual = await this.encontrarClientePorId(id);
 
     if (!clienteActual) return null;
 
@@ -60,14 +62,14 @@ export class ClienteService {
       estado_idestado: data.estado_idestado,
     });
 
-    return (await this.encontrarPorId(id)) as ICliente;
+    return (await this.encontrarClientePorId(id)) as ICliente;
   };
 
   cambiarEstadoCliente = async (
     id: number,
     data: Partial<ICliente>
   ): Promise<ICliente | null> => {
-    const clienteActual = await this.encontrarPorId(id);
+    const clienteActual = await this.encontrarClientePorId(id);
 
     if (!clienteActual) return null;
 
@@ -76,6 +78,6 @@ export class ClienteService {
       estado: data.estado_idestado,
     });
 
-    return (await this.encontrarPorId(id)) as ICliente;
+    return (await this.encontrarClientePorId(id)) as ICliente;
   };
 }

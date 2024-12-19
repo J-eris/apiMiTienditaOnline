@@ -12,9 +12,9 @@ export class CarritoController {
     }
   };
 
-  buscarPorId = async (req: Request, res: Response) => {
+  buscarCarritoPorId = async (req: Request, res: Response) => {
     try {
-      const carrito = await carritoService.encontrarPorId(
+      const carrito = await carritoService.encontrarCarritoPorId(
         parseInt(req.params.id)
       );
 

@@ -12,9 +12,11 @@ export class OrdenController {
     }
   };
 
-  buscarPorId = async (req: Request, res: Response) => {
+  buscarOrdenPorId = async (req: Request, res: Response) => {
     try {
-      const orden = await ordenService.encontrarPorId(parseInt(req.params.id));
+      const orden = await ordenService.encontrarOrdenPorId(
+        parseInt(req.params.id)
+      );
 
       if (!orden)
         return sendError(

@@ -14,9 +14,9 @@ export class ClienteController {
     }
   };
 
-  async buscarPorId(req: Request, res: Response) {
+  async buscarClientePorId(req: Request, res: Response) {
     try {
-      const cliente = await clienteService.encontrarPorId(
+      const cliente = await clienteService.encontrarClientePorId(
         parseInt(req.params.id)
       );
 

@@ -9,13 +9,15 @@ export class CategoriaService {
     });
   };
 
-  encontrarPorId = async (id: number): Promise<ICategoriaProducto | null> => {
+  encontrarCategoriaPorId = async (
+    id: number
+  ): Promise<ICategoriaProducto | null> => {
     return await CategoriaProducto.findByPk(id, {
       include: ["estado", "productos"],
     });
   };
 
-  encontrarPorNombre = async (
+  encontrarCategoriaPorNombre = async (
     nombre: string
   ): Promise<ICategoriaProducto | null> => {
     return await CategoriaProducto.findOne({ where: { nombre } });
@@ -27,7 +29,9 @@ export class CategoriaService {
       "idCategoriaProductos" | "fecha_creacion" | "fecha_actualizacion"
     >
   ): Promise<ICategoriaProducto | null> => {
-    const categoriaExistente = await this.encontrarPorNombre(data.nombre);
+    const categoriaExistente = await this.encontrarCategoriaPorNombre(
+      data.nombre
+    );
     if (categoriaExistente) return null;
 
     const categoria = await ejecutarSP("InsertCategoriaProducto", {
@@ -38,7 +42,7 @@ export class CategoriaService {
     if (!categoria[0][0].idCategoriaProductos)
       throw new Error("No se pudo crear la categoría.");
 
-    return (await this.encontrarPorId(
+    return (await this.encontrarCategoriaPorId(
       categoria[0][0].idCategoriaProductos
     )) as ICategoriaProducto;
   };
@@ -47,7 +51,7 @@ export class CategoriaService {
     id: number,
     data: Partial<ICategoriaProducto>
   ): Promise<ICategoriaProducto | null> => {
-    const categoriaActual = await this.encontrarPorId(id);
+    const categoriaActual = await this.encontrarCategoriaPorId(id);
 
     if (!categoriaActual) return null;
 
@@ -57,14 +61,14 @@ export class CategoriaService {
       estado_idestado: data.estado_idestado,
     });
 
-    return (await this.encontrarPorId(id)) as ICategoriaProducto;
+    return (await this.encontrarCategoriaPorId(id)) as ICategoriaProducto;
   };
 
   cambiarEstado = async (
     id: number,
     estado_idestado: number
   ): Promise<ICategoriaProducto | null> => {
-    const categoriaActual = await this.encontrarPorId(id);
+    const categoriaActual = await this.encontrarCategoriaPorId(id);
 
     if (!categoriaActual) return null;
 
@@ -73,7 +77,7 @@ export class CategoriaService {
       estado: estado_idestado,
     });
 
-    return (await this.encontrarPorId(id)) as ICategoriaProducto;
+    return (await this.encontrarCategoriaPorId(id)) as ICategoriaProducto;
   };
 }
 

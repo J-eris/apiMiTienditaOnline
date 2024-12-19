@@ -14,9 +14,9 @@ export class EstadoController {
     }
   };
 
-  buscarPorId = async (req: Request, res: Response) => {
+  buscarEstadoPorId = async (req: Request, res: Response) => {
     try {
-      const estado = await estadoService.encontrarPorId(
+      const estado = await estadoService.encontrarEstadoPorId(
         parseInt(req.params.id)
       );
 

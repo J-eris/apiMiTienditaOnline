@@ -14,9 +14,9 @@ export class RolController {
     }
   };
 
-  buscarPorId = async (req: Request, res: Response) => {
+  buscarRolPorId = async (req: Request, res: Response) => {
     try {
-      const rol = await rolService.encontrarPorId(parseInt(req.params.id));
+      const rol = await rolService.encontrarRolPorId(parseInt(req.params.id));
 
       if (!rol)
         return sendError(
