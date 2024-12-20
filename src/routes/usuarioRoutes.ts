@@ -11,7 +11,7 @@ usuarioRouter.get(
   usuarioController.buscarUsuarioPorId
 );
 usuarioRouter.get(
-  "/correo/:correo",
+  "/:correo/correo",
   authenticate,
   usuarioController.buscarUsuarioPorCorreo
 );
@@ -21,7 +21,7 @@ usuarioRouter.patch(
   usuarioController.actualizarUsuario
 );
 usuarioRouter.patch(
-  "/estado/:idUsuario",
+  "/:idUsuario/estado",
   authenticate,
   usuarioController.inactivarUsuario
 );

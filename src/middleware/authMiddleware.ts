@@ -6,7 +6,8 @@ export const authenticate = (
   res: Response,
   next: NextFunction
 ): void => {
-  const token = req.header("Authorization")?.replace("Bearer ", "");
+  const jwtByUser = req.headers.authorization || "";
+  const token = jwtByUser.split(" ").pop();
   if (!token) {
     res.status(401).send("Acceso denegado. Token no proporcionado.");
     return;

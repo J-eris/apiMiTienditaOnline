@@ -1,7 +1,6 @@
 import { Orden } from "../models/Orden";
-import { IOrden } from "../interfaces/IOrden";
+import { IOrden, IOrdenConDetalles } from "../interfaces/IOrden";
 import { ejecutarSP } from "../utils/dbUtils";
-import { IOrdenDetalles } from "../interfaces/IOrdenDetalles";
 
 export class OrdenService {
   listarTodasOrdenes = async (): Promise<IOrden[]> => {
@@ -24,23 +23,18 @@ export class OrdenService {
     });
   };
 
-  crearOrdenConDetalles = async (data: {
-    idUsuario: number;
-    estado_idestado: number;
-    nombre_completo: string;
-    direccion: string;
-    telefono: string;
-    correo_electronico: string;
-    fecha_entrega: Date;
-    total_orden: number;
-    detalles: Omit<IOrdenDetalles, "idOrdenDetalles" | "Orden_idOrden">[];
-  }): Promise<IOrden | null> => {
+  crearOrdenConDetalles = async (
+    data: Omit<
+      IOrdenConDetalles,
+      "idOrden" | "fecha_creacion" | "fecha_actualizacion" | "idOrdenDetalles"
+    >
+  ): Promise<IOrden | null> => {
     try {
       const detallesJSON = JSON.stringify({ detalles: data.detalles });
 
       const ordenResult = await ejecutarSP("InsertOrdenConDetalles", {
-        usuarios_idusuarios: data.idUsuario,
-        estados_idestado: data.estado_idestado,
+        usuarios_idusuarios: data.usuarios_idusuarios,
+        estados_idestado: data.estados_idestado,
         nombre_completo: data.nombre_completo,
         direccion: data.direccion,
         telefono: data.telefono,

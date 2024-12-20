@@ -26,9 +26,9 @@ export class RolService {
       nombre: data.nombre,
     });
 
-    if (!rol[0][0].idrol) throw new Error("No se pudo crear el rol.");
+    if (!rol) throw new Error("No se pudo crear el rol.");
 
-    return (await this.encontrarRolPorId(rol[0][0].idrol)) as IRol;
+    return rol[0][0] as IRol;
   };
 
   actualizarRol = async (

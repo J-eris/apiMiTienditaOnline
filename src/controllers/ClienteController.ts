@@ -58,7 +58,11 @@ export class ClienteController {
       } = req;
 
       if (!body.razon_social)
-        return sendError(res, "Razón social no especificada.", 400);
+        return sendError(
+          res,
+          "Datos incompletos para actualizar el cliente.",
+          400
+        );
 
       const clienteActualizado = await clienteService.actualizarCliente(
         parseInt(idCliente),
@@ -80,9 +84,17 @@ export class ClienteController {
 
   async cambiarEstadoCliente(req: Request, res: Response) {
     try {
+      const {
+        body,
+        params: { idCliente },
+      } = req;
+
+      if (!body.estado_idestado)
+        return sendError(res, "Estado no especificado.");
+
       const cliente = await clienteService.cambiarEstadoCliente(
-        parseInt(req.params.idCliente),
-        req.body
+        parseInt(idCliente),
+        body
       );
 
       if (!cliente)

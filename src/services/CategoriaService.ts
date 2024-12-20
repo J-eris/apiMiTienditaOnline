@@ -39,12 +39,9 @@ export class CategoriaService {
       estado_idestado: data.estado_idestado,
     });
 
-    if (!categoria[0][0].idCategoriaProductos)
-      throw new Error("No se pudo crear la categoría.");
+    if (!categoria) throw new Error("No se pudo crear la categoría.");
 
-    return (await this.encontrarCategoriaPorId(
-      categoria[0][0].idCategoriaProductos
-    )) as ICategoriaProducto;
+    return categoria[0][0] as ICategoriaProducto;
   };
 
   actualizarCategoria = async (

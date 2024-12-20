@@ -75,7 +75,7 @@ export class ProductoController {
       params: { idProducto },
     } = req;
 
-    if (!body.nombre || !body.codigo)
+    if (!body.codigo)
       return sendError(
         res,
         "Datos incompletos para actualizar el producto.",
@@ -131,9 +131,17 @@ export class ProductoController {
 
   cambiarEstadoProducto = async (req: Request, res: Response) => {
     try {
+      const {
+        body,
+        params: { idProducto },
+      } = req;
+
+      if (!body.estado_idestado)
+        return sendError(res, "Estado no especificado.", 400);
+
       const producto = await productoService.cambiarEstadoProducto(
-        parseInt(req.params.idProducto),
-        req.body.estado_idestado
+        parseInt(idProducto),
+        body.estado_idestado
       );
 
       if (!producto)

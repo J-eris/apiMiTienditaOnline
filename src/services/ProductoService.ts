@@ -51,6 +51,12 @@ export class ProductoService {
   ): Promise<IProducto | null> => {
     console.log(data);
     try {
+      const productoExistente = await this.encontrarPorCodigo(
+        data.codigo || ""
+      );
+
+      if (productoExistente) return null;
+
       const imagenesJSON = data.imagenes
         ? JSON.stringify({ imagenes: data.imagenes })
         : null;

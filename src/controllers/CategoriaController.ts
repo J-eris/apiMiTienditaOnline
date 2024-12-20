@@ -78,9 +78,17 @@ export class CategoriaController {
 
   cambiarEstadoCategoria = async (req: Request, res: Response) => {
     try {
+      const {
+        body,
+        params: { idCategoria },
+      } = req;
+
+      if (!body.estado_idestado)
+        return sendError(res, "Estado no especificado.");
+
       const categoria = await categoriaService.cambiarEstado(
-        parseInt(req.params.idCategoria),
-        req.body.estado_idestado
+        parseInt(idCategoria),
+        body.estado_idestado
       );
 
       if (!categoria)

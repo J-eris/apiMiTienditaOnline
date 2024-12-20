@@ -61,7 +61,7 @@ class UsuarioController {
         params: { idUsuario },
       } = req;
 
-      if (!body.correo_electronico || !body.password)
+      if (!body.correo_electronico)
         return sendError(
           res,
           "Datos incompletos para actualizar el usuario.",
@@ -88,9 +88,21 @@ class UsuarioController {
 
   inactivarUsuario = async (req: Request, res: Response) => {
     try {
+      const {
+        body,
+        params: { idUsuario },
+      } = req;
+
+      if (!body.estado_idestado)
+        return sendError(
+          res,
+          "Datos incompletos para actualizar el estado del usuario.",
+          400
+        );
+
       const estadoActualizado = await usuarioService.cambiarEstadoUsuario(
-        parseInt(req.params.idUsuario),
-        req.body
+        parseInt(idUsuario),
+        body
       );
 
       if (!estadoActualizado) {

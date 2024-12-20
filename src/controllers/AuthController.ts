@@ -7,7 +7,7 @@ class AuthController {
     try {
       const { body } = req;
 
-      if (!body.email || !body.password)
+      if (!body.correo_electronico || !body.password)
         return sendError(
           res,
           "Datos incompletos para registrar el usuario.",

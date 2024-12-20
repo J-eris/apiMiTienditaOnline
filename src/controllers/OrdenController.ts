@@ -36,9 +36,8 @@ export class OrdenController {
       const { body } = req;
 
       if (
-        !body.idOrden ||
         !body.usuarios_idusuarios ||
-        !body.estado_idestado ||
+        !body.estados_idestado ||
         !body.nombre_completo ||
         !body.direccion ||
         !body.telefono ||
@@ -69,12 +68,7 @@ export class OrdenController {
       if (
         !body.usuarios_idusuarios ||
         !body.estados_idestado ||
-        !body.nombre_completo ||
-        !body.direccion ||
-        !body.telefono ||
-        !body.correo_electronico ||
-        !body.fecha_entrega ||
-        !body.total_orden
+        !body.nombre_completo
       )
         return sendError(
           res,
@@ -102,9 +96,21 @@ export class OrdenController {
 
   cambiarEstadoOrden = async (req: Request, res: Response) => {
     try {
+      const {
+        body,
+        params: { idOrden },
+      } = req;
+
+      if (!body.estado_idestado)
+        return sendError(
+          res,
+          "Datos incompletos para cambiar el estado de la orden.",
+          400
+        );
+
       const orden = await ordenService.cambiarEstado(
-        parseInt(req.params.idOrden),
-        req.body.estado_idestado
+        parseInt(idOrden),
+        body.estado_idestado
       );
 
       if (!orden)

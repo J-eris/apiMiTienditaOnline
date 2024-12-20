@@ -27,9 +27,9 @@ export class EstadoService {
       nombre: data.nombre,
     });
 
-    if (!estado[0][0].idestado) throw new Error("No se pudo crear el estado.");
+    if (!estado) throw new Error("No se pudo crear el estado.");
 
-    return (await this.encontrarEstadoPorId(estado[0][0].idestado)) as IEstado;
+    return estado[0][0] as IEstado;
   };
 
   actualizarEstado = async (

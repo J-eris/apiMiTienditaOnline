@@ -1,3 +1,5 @@
+import { IOrdenDetalles } from "./IOrdenDetalles";
+
 export interface IOrden {
   idOrden: number;
   usuarios_idusuarios: number;
@@ -10,4 +12,8 @@ export interface IOrden {
   correo_electronico: string;
   fecha_entrega: Date;
   total_orden: number;
+}
+
+export interface IOrdenConDetalles extends IOrden {
+  detalles: IOrdenDetalles[];
 }

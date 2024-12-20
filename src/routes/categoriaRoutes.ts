@@ -17,7 +17,7 @@ router.patch(
   CategoriaController.actualizarCategoria
 );
 router.patch(
-  "/:id/estado",
+  "/:idCategoria/estado",
   authenticate,
   CategoriaController.cambiarEstadoCategoria
 );

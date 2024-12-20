@@ -10,7 +10,7 @@ router.get("/:idCliente", authenticate, clienteController.buscarClientePorId);
 router.post("/", authenticate, clienteController.crearCliente);
 router.patch("/:idCliente", authenticate, clienteController.actualizarCliente);
 router.patch(
-  "/estado/:idCliente",
+  "/:idCliente/estado",
   authenticate,
   clienteController.cambiarEstadoCliente
 );

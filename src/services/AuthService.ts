@@ -31,12 +31,9 @@ class AuthService {
       Clientes_idClientes: data.Clientes_idClientes || null,
     });
 
-    if (!result[0][0].idusuarios)
-      throw new Error("No se pudo registrar el usuario.");
+    if (!result) throw new Error("No se pudo registrar el usuario.");
 
-    return (await UsuarioService.encontrarUsuarioPorId(
-      result[0][0].idusuarios
-    )) as IUsuario;
+    return result[0][0] as IUsuario;
   };
 
   loginUsuario = async (
