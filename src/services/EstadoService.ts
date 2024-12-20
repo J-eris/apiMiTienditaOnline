@@ -7,8 +7,8 @@ export class EstadoService {
     return await Estado.findAll();
   }
 
-  encontrarEstadoPorId = async (id: number): Promise<IEstado | null> => {
-    return await Estado.findByPk(id);
+  encontrarEstadoPorId = async (idEstado: number): Promise<IEstado | null> => {
+    return await Estado.findByPk(idEstado);
   };
 
   encontrarEstadoPorNombre = async (
@@ -33,18 +33,18 @@ export class EstadoService {
   };
 
   actualizarEstado = async (
-    id: number,
+    idEstado: number,
     data: Partial<IEstado>
   ): Promise<IEstado | null> => {
-    const estadoActual = await this.encontrarEstadoPorId(id);
+    const estadoActual = await this.encontrarEstadoPorId(idEstado);
 
     if (!estadoActual) return null;
 
     await ejecutarSP("UpdateEstado", {
-      idestado: id,
+      idestado: idEstado,
       nombre: data.nombre || estadoActual.nombre,
     });
 
-    return (await this.encontrarEstadoPorId(id)) as IEstado;
+    return (await this.encontrarEstadoPorId(idEstado)) as IEstado;
   };
 }

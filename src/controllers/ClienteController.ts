@@ -17,13 +17,13 @@ export class ClienteController {
   async buscarClientePorId(req: Request, res: Response) {
     try {
       const cliente = await clienteService.encontrarClientePorId(
-        parseInt(req.params.id)
+        parseInt(req.params.idCliente)
       );
 
       if (!cliente)
         return sendError(
           res,
-          `Cliente con id ${req.params.id} no encontrado.`,
+          `Cliente con id ${req.params.idCliente} no encontrado.`,
           404
         );
 
@@ -54,21 +54,21 @@ export class ClienteController {
     try {
       const {
         body,
-        params: { id },
+        params: { idCliente },
       } = req;
 
       if (!body.razon_social)
         return sendError(res, "Razón social no especificada.", 400);
 
       const clienteActualizado = await clienteService.actualizarCliente(
-        parseInt(id),
+        parseInt(idCliente),
         body
       );
 
       if (!clienteActualizado)
         return sendError(
           res,
-          `Cliente con id ${req.params.id} no encontrado.`,
+          `Cliente con id ${req.params.idCliente} no encontrado.`,
           404
         );
 
@@ -81,14 +81,14 @@ export class ClienteController {
   async cambiarEstadoCliente(req: Request, res: Response) {
     try {
       const cliente = await clienteService.cambiarEstadoCliente(
-        parseInt(req.params.id),
+        parseInt(req.params.idCliente),
         req.body
       );
 
       if (!cliente)
         return sendError(
           res,
-          `Cliente con id ${req.params.id} no encontrado.`,
+          `Cliente con id ${req.params.idCliente} no encontrado.`,
           404
         );
 

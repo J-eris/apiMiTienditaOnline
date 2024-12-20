@@ -5,8 +5,12 @@ import { authenticate } from "../middleware/authMiddleware";
 const router = Router();
 
 router.get("/", authenticate, carritoController.listarCarritos);
-router.get("/:id", authenticate, carritoController.buscarCarritoPorId);
+router.get("/:idCarrito", authenticate, carritoController.buscarCarritoPorId);
 router.post("/", authenticate, carritoController.guardarCarrito);
-router.delete("/:id", authenticate, carritoController.eliminarCarrito);
+router.patch(
+  "/:idCarrito/estado",
+  authenticate,
+  carritoController.inactivarCarrito
+);
 
 export default router;

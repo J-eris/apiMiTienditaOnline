@@ -10,9 +10,9 @@ export class CategoriaService {
   };
 
   encontrarCategoriaPorId = async (
-    id: number
+    idCategoria: number
   ): Promise<ICategoriaProducto | null> => {
-    return await CategoriaProducto.findByPk(id, {
+    return await CategoriaProducto.findByPk(idCategoria, {
       include: ["estado", "productos"],
     });
   };
@@ -48,36 +48,40 @@ export class CategoriaService {
   };
 
   actualizarCategoria = async (
-    id: number,
+    idCategoria: number,
     data: Partial<ICategoriaProducto>
   ): Promise<ICategoriaProducto | null> => {
-    const categoriaActual = await this.encontrarCategoriaPorId(id);
+    const categoriaActual = await this.encontrarCategoriaPorId(idCategoria);
 
     if (!categoriaActual) return null;
 
     await ejecutarSP("UpdateCategoriaProducto", {
-      idCategoriaProductos: id,
+      idCategoriaProductos: idCategoria,
       nombre: data.nombre,
       estado_idestado: data.estado_idestado,
     });
 
-    return (await this.encontrarCategoriaPorId(id)) as ICategoriaProducto;
+    return (await this.encontrarCategoriaPorId(
+      idCategoria
+    )) as ICategoriaProducto;
   };
 
   cambiarEstado = async (
-    id: number,
+    idCategoria: number,
     estado_idestado: number
   ): Promise<ICategoriaProducto | null> => {
-    const categoriaActual = await this.encontrarCategoriaPorId(id);
+    const categoriaActual = await this.encontrarCategoriaPorId(idCategoria);
 
     if (!categoriaActual) return null;
 
     await ejecutarSP("SetEstadoCategoriaProducto", {
-      idCategoria: id,
+      idCategoria: idCategoria,
       estado: estado_idestado,
     });
 
-    return (await this.encontrarCategoriaPorId(id)) as ICategoriaProducto;
+    return (await this.encontrarCategoriaPorId(
+      idCategoria
+    )) as ICategoriaProducto;
   };
 }
 

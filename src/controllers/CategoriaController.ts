@@ -15,13 +15,13 @@ export class CategoriaController {
   buscarCategoriaPorId = async (req: Request, res: Response) => {
     try {
       const categoria = await categoriaService.encontrarCategoriaPorId(
-        parseInt(req.params.id)
+        parseInt(req.params.idCategoria)
       );
 
       if (!categoria)
         return sendError(
           res,
-          `Categoría con id ${req.params.id} no encontrado.`,
+          `Categoría con id ${req.params.idCategoria} no encontrado.`,
           404
         );
 
@@ -52,21 +52,21 @@ export class CategoriaController {
     try {
       const {
         body,
-        params: { id },
+        params: { idCategoria },
       } = req;
 
       if (!body.nombre)
         return sendError(res, "Nombre de categoría no especificado.", 400);
 
       const categoriaActualizada = await categoriaService.actualizarCategoria(
-        parseInt(id),
+        parseInt(idCategoria),
         body
       );
 
       if (!categoriaActualizada)
         return sendError(
           res,
-          `Categoría con id ${req.params.id} no encontrado.`,
+          `Categoría con id ${req.params.idCategoria} no encontrado.`,
           404
         );
 
@@ -79,14 +79,14 @@ export class CategoriaController {
   cambiarEstadoCategoria = async (req: Request, res: Response) => {
     try {
       const categoria = await categoriaService.cambiarEstado(
-        parseInt(req.params.id),
+        parseInt(req.params.idCategoria),
         req.body.estado_idestado
       );
 
       if (!categoria)
         return sendError(
           res,
-          `Categoría con id ${req.params.id} no encontrado.`,
+          `Categoría con id ${req.params.idCategoria} no encontrado.`,
           404
         );
 

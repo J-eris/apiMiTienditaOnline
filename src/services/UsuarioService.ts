@@ -12,8 +12,10 @@ class UsuarioService {
     return usuarios as IUsuario[];
   };
 
-  encontrarUsuarioPorId = async (id: number): Promise<IUsuario | null> => {
-    const usuario = await Usuario.findByPk(id, {
+  encontrarUsuarioPorId = async (
+    idUsuario: number
+  ): Promise<IUsuario | null> => {
+    const usuario = await Usuario.findByPk(idUsuario, {
       attributes: { exclude: ["password"] },
       include: ["estado", "rol", "cliente"],
     });
@@ -37,10 +39,10 @@ class UsuarioService {
   };
 
   actualizarUsuario = async (
-    id: number,
+    idUsuario: number,
     data: Partial<IUsuario>
   ): Promise<IUsuario | null> => {
-    const usuarioActual = await this.encontrarUsuarioPorId(id);
+    const usuarioActual = await this.encontrarUsuarioPorId(idUsuario);
 
     if (!usuarioActual) return null;
 
@@ -49,7 +51,7 @@ class UsuarioService {
       : usuarioActual.password;
 
     await ejecutarSP("UpdateUsuario", {
-      idusuarios: id || usuarioActual.idusuarios,
+      idusuarios: idUsuario || usuarioActual.idusuarios,
       correo_electronico:
         data.correo_electronico || usuarioActual.correo_electronico,
       password: data.password,
@@ -62,23 +64,23 @@ class UsuarioService {
         data.Clientes_idClientes || usuarioActual.Clientes_idClientes,
     });
 
-    return (await this.encontrarUsuarioPorId(id)) as IUsuario;
+    return (await this.encontrarUsuarioPorId(idUsuario)) as IUsuario;
   };
 
   cambiarEstadoUsuario = async (
-    id: number,
+    idUsuario: number,
     data: Partial<IUsuario>
   ): Promise<IUsuario | null> => {
-    const usuarioActual = await this.encontrarUsuarioPorId(id);
+    const usuarioActual = await this.encontrarUsuarioPorId(idUsuario);
 
     if (!usuarioActual) return null;
 
     await ejecutarSP("SetEstadoUsuario", {
-      idUsuario: id,
+      idUsuario: idUsuario,
       estado: data.estado_idestado,
     });
 
-    return (await this.encontrarUsuarioPorId(id)) as IUsuario;
+    return (await this.encontrarUsuarioPorId(idUsuario)) as IUsuario;
   };
 }
 

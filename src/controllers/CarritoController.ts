@@ -15,13 +15,13 @@ export class CarritoController {
   buscarCarritoPorId = async (req: Request, res: Response) => {
     try {
       const carrito = await carritoService.encontrarCarritoPorId(
-        parseInt(req.params.id)
+        parseInt(req.params.idCarrito)
       );
 
       if (!carrito)
         return sendError(
           res,
-          `Carrito con id ${req.params.id} no encontrado.`,
+          `Carrito con id ${req.params.idCarrito} no encontrado.`,
           404
         );
 
@@ -55,20 +55,32 @@ export class CarritoController {
     }
   };
 
-  eliminarCarrito = async (req: Request, res: Response) => {
+  inactivarCarrito = async (req: Request, res: Response) => {
     try {
-      const carrito = await carritoService.eliminarCarrito(
-        parseInt(req.params.id)
+      const {
+        body,
+        params: { idCarrito },
+      } = req;
+
+      if (!body.estado_idestado)
+        return sendError(
+          res,
+          "Datos incompletos para inactivar el carrito.",
+          400
+        );
+      const carrito = await carritoService.inactivarCarrito(
+        parseInt(idCarrito),
+        body
       );
 
       if (!carrito)
         return sendError(
           res,
-          `Carrito con id ${req.params.id} no encontrado.`,
+          `Carrito con id ${req.params.idCarrito} no encontrado.`,
           404
         );
 
-      sendSuccess(res, "Carrito eliminado exitosamente.");
+      sendSuccess(res, carrito);
     } catch (error: any) {
       sendError(res, error.message);
     }

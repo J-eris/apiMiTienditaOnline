@@ -6,11 +6,11 @@ const router = Router();
 const clienteController = new ClienteController();
 
 router.get("/", authenticate, clienteController.listarClientes);
-router.get("/:id", authenticate, clienteController.buscarClientePorId);
+router.get("/:idCliente", authenticate, clienteController.buscarClientePorId);
 router.post("/", authenticate, clienteController.crearCliente);
-router.patch("/:id", authenticate, clienteController.actualizarCliente);
+router.patch("/:idCliente", authenticate, clienteController.actualizarCliente);
 router.patch(
-  "/estado/:id",
+  "/estado/:idCliente",
   authenticate,
   clienteController.cambiarEstadoCliente
 );

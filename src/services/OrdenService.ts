@@ -62,15 +62,15 @@ export class OrdenService {
   };
 
   actualizarOrden = async (
-    id: number,
+    idOrden: number,
     data: Partial<IOrden>
   ): Promise<IOrden | null> => {
-    const ordenActual = await this.encontrarOrdenPorId(id);
+    const ordenActual = await this.encontrarOrdenPorId(idOrden);
 
     if (!ordenActual) return null;
 
     await ejecutarSP("UpdateOrden", {
-      idOrden: id,
+      idOrden: idOrden,
       usuarios_idusuarios: data.usuarios_idusuarios,
       estados_idestado: data.estados_idestado,
       nombre_completo: data.nombre_completo,
@@ -81,23 +81,23 @@ export class OrdenService {
       total_orden: data.total_orden,
     });
 
-    return (await this.encontrarOrdenPorId(id)) as IOrden;
+    return (await this.encontrarOrdenPorId(idOrden)) as IOrden;
   };
 
   cambiarEstado = async (
-    id: number,
+    idOrden: number,
     estado_idestado: number
   ): Promise<IOrden | null> => {
-    const ordenActual = await this.encontrarOrdenPorId(id);
+    const ordenActual = await this.encontrarOrdenPorId(idOrden);
 
     if (!ordenActual) return null;
 
     await ejecutarSP("SetEstadoOrden", {
-      idOrden: id,
+      idOrden: idOrden,
       estado: estado_idestado,
     });
 
-    return (await this.encontrarOrdenPorId(id)) as IOrden;
+    return (await this.encontrarOrdenPorId(idOrden)) as IOrden;
   };
 }
 

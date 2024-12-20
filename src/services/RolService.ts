@@ -7,8 +7,8 @@ export class RolService {
     return await Rol.findAll();
   }
 
-  encontrarRolPorId = async (id: number): Promise<IRol | null> => {
-    const rol = await Rol.findByPk(id);
+  encontrarRolPorId = async (idRol: number): Promise<IRol | null> => {
+    const rol = await Rol.findByPk(idRol);
 
     if (!rol) return null;
     return rol as IRol;
@@ -32,18 +32,18 @@ export class RolService {
   };
 
   actualizarRol = async (
-    id: number,
+    idRol: number,
     data: Partial<IRol>
   ): Promise<IRol | null> => {
-    const rolActual = await this.encontrarRolPorId(id);
+    const rolActual = await this.encontrarRolPorId(idRol);
 
     if (!rolActual) return null;
 
     await ejecutarSP("UpdateRol", {
-      idrol: id,
+      idrol: idRol,
       nombre: data.nombre || rolActual.nombre,
     });
 
-    return (await this.encontrarRolPorId(id)) as IRol;
+    return (await this.encontrarRolPorId(idRol)) as IRol;
   };
 }

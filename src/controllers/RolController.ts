@@ -16,12 +16,14 @@ export class RolController {
 
   buscarRolPorId = async (req: Request, res: Response) => {
     try {
-      const rol = await rolService.encontrarRolPorId(parseInt(req.params.id));
+      const rol = await rolService.encontrarRolPorId(
+        parseInt(req.params.idRol)
+      );
 
       if (!rol)
         return sendError(
           res,
-          `Rol con id ${req.params.id} no encontrado.`,
+          `Rol con id ${req.params.idRol} no encontrado.`,
           404
         );
 
@@ -51,18 +53,21 @@ export class RolController {
     try {
       const {
         body,
-        params: { id },
+        params: { idRol },
       } = req;
 
       if (!body.nombre)
         return sendError(res, "Nombre de rol no especificado.", 400);
 
-      const rolActualizado = await rolService.actualizarRol(parseInt(id), body);
+      const rolActualizado = await rolService.actualizarRol(
+        parseInt(idRol),
+        body
+      );
 
       if (!rolActualizado)
         return sendError(
           res,
-          `Rol con id ${req.params.id} no encontrado.`,
+          `Rol con id ${req.params.idRol} no encontrado.`,
           404
         );
 

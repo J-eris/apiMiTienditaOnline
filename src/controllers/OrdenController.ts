@@ -15,13 +15,13 @@ export class OrdenController {
   buscarOrdenPorId = async (req: Request, res: Response) => {
     try {
       const orden = await ordenService.encontrarOrdenPorId(
-        parseInt(req.params.id)
+        parseInt(req.params.idOrden)
       );
 
       if (!orden)
         return sendError(
           res,
-          `Orden con id ${req.params.id} no encontrada.`,
+          `Orden con id ${req.params.idOrden} no encontrada.`,
           404
         );
 
@@ -63,7 +63,7 @@ export class OrdenController {
     try {
       const {
         body,
-        params: { id },
+        params: { idOrden },
       } = req;
 
       if (
@@ -83,14 +83,14 @@ export class OrdenController {
         );
 
       const ordenActualizada = await ordenService.actualizarOrden(
-        parseInt(id),
+        parseInt(idOrden),
         body
       );
 
       if (!ordenActualizada)
         return sendError(
           res,
-          `Orden con id ${req.params.id} no encontrada.`,
+          `Orden con id ${req.params.idOrden} no encontrada.`,
           404
         );
 
@@ -103,14 +103,14 @@ export class OrdenController {
   cambiarEstadoOrden = async (req: Request, res: Response) => {
     try {
       const orden = await ordenService.cambiarEstado(
-        parseInt(req.params.id),
+        parseInt(req.params.idOrden),
         req.body.estado_idestado
       );
 
       if (!orden)
         return sendError(
           res,
-          `Orden con id ${req.params.id} no encontrada.`,
+          `Orden con id ${req.params.idOrden} no encontrada.`,
           404
         );
 

@@ -15,11 +15,15 @@ class UsuarioController {
   buscarUsuarioPorId = async (req: Request, res: Response) => {
     try {
       const usuario = await usuarioService.encontrarUsuarioPorId(
-        parseInt(req.params.id)
+        parseInt(req.params.idUsuario)
       );
 
       if (!usuario) {
-        sendError(res, `Usuario con id ${req.params.id} no encontrado.`, 404);
+        sendError(
+          res,
+          `Usuario con id ${req.params.idUsuario} no encontrado.`,
+          404
+        );
         return;
       }
 
@@ -54,7 +58,7 @@ class UsuarioController {
     try {
       const {
         body,
-        params: { id },
+        params: { idUsuario },
       } = req;
 
       if (!body.correo_electronico || !body.password)
@@ -65,14 +69,14 @@ class UsuarioController {
         );
 
       const usuarioActualizado = await usuarioService.actualizarUsuario(
-        parseInt(id),
+        parseInt(idUsuario),
         body
       );
 
       if (!usuarioActualizado)
         return sendError(
           res,
-          `Usuario con id ${req.params.id} no encontrado.`,
+          `Usuario con id ${req.params.idUsuario} no encontrado.`,
           404
         );
 
@@ -85,12 +89,16 @@ class UsuarioController {
   inactivarUsuario = async (req: Request, res: Response) => {
     try {
       const estadoActualizado = await usuarioService.cambiarEstadoUsuario(
-        parseInt(req.params.id),
+        parseInt(req.params.idUsuario),
         req.body
       );
 
       if (!estadoActualizado) {
-        sendError(res, `Usuario con id ${req.params.id} no encontrado.`, 404);
+        sendError(
+          res,
+          `Usuario con id ${req.params.idUsuario} no encontrado.`,
+          404
+        );
         return;
       }
 

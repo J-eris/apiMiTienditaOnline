@@ -17,13 +17,13 @@ export class EstadoController {
   buscarEstadoPorId = async (req: Request, res: Response) => {
     try {
       const estado = await estadoService.encontrarEstadoPorId(
-        parseInt(req.params.id)
+        parseInt(req.params.idEstado)
       );
 
       if (!estado)
         return sendError(
           res,
-          `Estado con id ${req.params.id} no encontrado.`,
+          `Estado con id ${req.params.idEstado} no encontrado.`,
           404
         );
 
@@ -54,7 +54,7 @@ export class EstadoController {
     try {
       const {
         body,
-        params: { id },
+        params: { idEstado },
       } = req;
 
       if (!body.nombre)
@@ -65,14 +65,14 @@ export class EstadoController {
         );
 
       const estadoActualizado = await estadoService.actualizarEstado(
-        parseInt(id),
+        parseInt(idEstado),
         body
       );
 
       if (!estadoActualizado)
         return sendError(
           res,
-          `Estado con id ${req.params.id} no encontrado.`,
+          `Estado con id ${req.params.idEstado} no encontrado.`,
           404
         );
 

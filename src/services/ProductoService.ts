@@ -17,8 +17,10 @@ export class ProductoService {
     });
   };
 
-  encontrarProductoPorId = async (id: number): Promise<IProducto | null> => {
-    return await Producto.findByPk(id, {
+  encontrarProductoPorId = async (
+    idProducto: number
+  ): Promise<IProducto | null> => {
+    return await Producto.findByPk(idProducto, {
       include: [
         { association: "categoriaProducto" },
         { association: "usuario", attributes: { exclude: ["password"] } },
@@ -30,9 +32,9 @@ export class ProductoService {
   };
 
   encontrarImagenPorId = async (
-    id: number
+    idImagen: number
   ): Promise<IProductoImagen | null> => {
-    return await ProductoImagen.findByPk(id, {
+    return await ProductoImagen.findByPk(idImagen, {
       include: [{ association: "producto" }],
     });
   };
@@ -78,15 +80,15 @@ export class ProductoService {
   };
 
   actualizarProducto = async (
-    id: number,
+    idProducto: number,
     data: Partial<IProducto>
   ): Promise<IProducto | null> => {
-    const productoActual = await this.encontrarProductoPorId(id);
+    const productoActual = await this.encontrarProductoPorId(idProducto);
 
     if (!productoActual) return null;
 
     await ejecutarSP("UpdateProducto", {
-      idProductos: id,
+      idProductos: idProducto,
       nombre: data.nombre,
       marca: data.marca,
       codigo: data.codigo,
@@ -98,7 +100,7 @@ export class ProductoService {
       estado_idestado: data.estado_idestado,
     });
 
-    return (await this.encontrarProductoPorId(id)) as IProducto;
+    return (await this.encontrarProductoPorId(idProducto)) as IProducto;
   };
 
   actualizarProductoImagen = async (
@@ -120,27 +122,29 @@ export class ProductoService {
   };
 
   cambiarEstadoProducto = async (
-    id: number,
+    idProducto: number,
     estado_idestado: number
   ): Promise<IProducto | null> => {
-    const productoActual = await this.encontrarProductoPorId(id);
+    const productoActual = await this.encontrarProductoPorId(idProducto);
 
     if (!productoActual) return null;
 
     await ejecutarSP("SetEstadoProducto", {
-      idProducto: id,
+      idProducto: idProducto,
       estado: estado_idestado,
     });
 
-    return (await this.encontrarProductoPorId(id)) as IProducto;
+    return (await this.encontrarProductoPorId(idProducto)) as IProducto;
   };
 
-  eliminarImagenProducto = async (id: number): Promise<boolean | null> => {
-    const imagen = await this.encontrarImagenPorId(id);
+  eliminarImagenProducto = async (
+    idImagen: number
+  ): Promise<boolean | null> => {
+    const imagen = await this.encontrarImagenPorId(idImagen);
 
     if (!imagen) return null;
 
-    await ejecutarSP("DeleteProductoImagen", { idImagen: id });
+    await ejecutarSP("DeleteProductoImagen", { idImagen: idImagen });
 
     return true;
   };

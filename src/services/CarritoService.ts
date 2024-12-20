@@ -1,7 +1,6 @@
 import { Carrito } from "../models/Carrito";
 import { ICarrito } from "../interfaces/ICarrito";
 import { ejecutarSP } from "../utils/dbUtils";
-import { ICarritoDetalles } from "../interfaces/ICarritoDetalles";
 import { ICarritoConDetalles } from "../interfaces/ICarritoConDetalles";
 
 export class CarritoService {
@@ -18,8 +17,10 @@ export class CarritoService {
     });
   };
 
-  encontrarCarritoPorId = async (id: number): Promise<ICarrito | null> => {
-    return await Carrito.findByPk(id, {
+  encontrarCarritoPorId = async (
+    idCarrito: number
+  ): Promise<ICarrito | null> => {
+    return await Carrito.findByPk(idCarrito, {
       include: [
         {
           association: "usuario",
@@ -54,14 +55,20 @@ export class CarritoService {
     }
   };
 
-  eliminarCarrito = async (id: number): Promise<boolean | null> => {
-    const carrito = await this.encontrarCarritoPorId(id);
+  inactivarCarrito = async (
+    idCarrito: number,
+    data: Partial<ICarrito>
+  ): Promise<ICarrito | null> => {
+    const carritoActual = await this.encontrarCarritoPorId(idCarrito);
 
-    if (!carrito) return null;
+    if (!carritoActual) return null;
 
-    await ejecutarSP("DeleteCarrito", { idCarrito: id });
+    await ejecutarSP("SetEstadoCarrito", {
+      idCarrito: idCarrito,
+      estado: data.estado_idestado,
+    });
 
-    return true;
+    return await this.encontrarCarritoPorId(idCarrito);
   };
 }
 

@@ -9,8 +9,10 @@ export class ClienteService {
     });
   };
 
-  encontrarClientePorId = async (id: number): Promise<ICliente | null> => {
-    return await Cliente.findByPk(id, { include: ["estado"] });
+  encontrarClientePorId = async (
+    idCliente: number
+  ): Promise<ICliente | null> => {
+    return await Cliente.findByPk(idCliente, { include: ["estado"] });
   };
 
   encontrarPorRazonSocial = async (
@@ -45,15 +47,15 @@ export class ClienteService {
   };
 
   actualizarCliente = async (
-    id: number,
+    idCliente: number,
     data: Partial<ICliente>
   ): Promise<ICliente | null> => {
-    const clienteActual = await this.encontrarClientePorId(id);
+    const clienteActual = await this.encontrarClientePorId(idCliente);
 
     if (!clienteActual) return null;
 
     await ejecutarSP("UpdateCliente", {
-      idClientes: id,
+      idClientes: idCliente,
       razon_social: data.razon_social,
       nombre_comercial: data.nombre_comercial,
       direccion_entrega: data.direccion_entrega,
@@ -62,22 +64,22 @@ export class ClienteService {
       estado_idestado: data.estado_idestado,
     });
 
-    return (await this.encontrarClientePorId(id)) as ICliente;
+    return (await this.encontrarClientePorId(idCliente)) as ICliente;
   };
 
   cambiarEstadoCliente = async (
-    id: number,
+    idCliente: number,
     data: Partial<ICliente>
   ): Promise<ICliente | null> => {
-    const clienteActual = await this.encontrarClientePorId(id);
+    const clienteActual = await this.encontrarClientePorId(idCliente);
 
     if (!clienteActual) return null;
 
     await ejecutarSP("SetEstadoCliente", {
-      idCliente: id,
+      idCliente: idCliente,
       estado: data.estado_idestado,
     });
 
-    return (await this.encontrarClientePorId(id)) as ICliente;
+    return (await this.encontrarClientePorId(idCliente)) as ICliente;
   };
 }

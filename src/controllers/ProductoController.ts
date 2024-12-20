@@ -15,13 +15,13 @@ export class ProductoController {
   buscarProductoPorId = async (req: Request, res: Response) => {
     try {
       const producto = await productoService.encontrarProductoPorId(
-        parseInt(req.params.id)
+        parseInt(req.params.idProducto)
       );
 
       if (!producto)
         return sendError(
           res,
-          `Producto con id ${req.params.id} no encontrado.`,
+          `Producto con id ${req.params.idProducto} no encontrado.`,
           404
         );
 
@@ -34,13 +34,13 @@ export class ProductoController {
   buscarImagenPorId = async (req: Request, res: Response) => {
     try {
       const imagen = await productoService.encontrarImagenPorId(
-        parseInt(req.params.id)
+        parseInt(req.params.idImagen)
       );
 
       if (!imagen)
         return sendError(
           res,
-          `Imagen con id ${req.params.id} no encontrada.`,
+          `Imagen con id ${req.params.idImagen} no encontrada.`,
           404
         );
 
@@ -72,7 +72,7 @@ export class ProductoController {
   actualizarProducto = async (req: Request, res: Response) => {
     const {
       body,
-      params: { id },
+      params: { idProducto },
     } = req;
 
     if (!body.nombre || !body.codigo)
@@ -84,14 +84,14 @@ export class ProductoController {
 
     try {
       const productoActualizado = await productoService.actualizarProducto(
-        parseInt(id),
+        parseInt(idProducto),
         body
       );
 
       if (!productoActualizado)
         return sendError(
           res,
-          `Producto con id ${req.params.id} no encontrado.`,
+          `Producto con id ${req.params.idProducto} no encontrado.`,
           404
         );
 
@@ -104,7 +104,7 @@ export class ProductoController {
   actualizarImagenProducto = async (req: Request, res: Response) => {
     const {
       body,
-      params: { id },
+      params: { idImagen },
     } = req;
 
     if (!body.ruta_imagen)
@@ -112,14 +112,14 @@ export class ProductoController {
 
     try {
       const imagenActualizada = await productoService.actualizarProductoImagen(
-        parseInt(id),
+        parseInt(idImagen),
         body
       );
 
       if (!imagenActualizada)
         return sendError(
           res,
-          `Imagen con id ${req.params.id} no encontrada.`,
+          `Imagen con id ${req.params.idImagen} no encontrada.`,
           404
         );
 
@@ -132,14 +132,14 @@ export class ProductoController {
   cambiarEstadoProducto = async (req: Request, res: Response) => {
     try {
       const producto = await productoService.cambiarEstadoProducto(
-        parseInt(req.params.id),
+        parseInt(req.params.idProducto),
         req.body.estado_idestado
       );
 
       if (!producto)
         return sendError(
           res,
-          `Producto con id ${req.params.id} no encontrado.`,
+          `Producto con id ${req.params.idProducto} no encontrado.`,
           404
         );
 
@@ -152,13 +152,13 @@ export class ProductoController {
   eliminarImagenProducto = async (req: Request, res: Response) => {
     try {
       const imagen = await productoService.eliminarImagenProducto(
-        parseInt(req.params.id)
+        parseInt(req.params.idImagen)
       );
 
       if (!imagen)
         return sendError(
           res,
-          `Imagen con id ${req.params.id} no encontrada.`,
+          `Imagen con id ${req.params.idImagen} no encontrada.`,
           404
         );
 

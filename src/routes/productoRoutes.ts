@@ -5,22 +5,34 @@ import { authenticate } from "../middleware/authMiddleware";
 const router = Router();
 
 router.get("/", authenticate, ProductoController.listarProductos);
-router.get("/:id", authenticate, ProductoController.buscarProductoPorId);
-router.get("/:id/imagen", authenticate, ProductoController.buscarImagenPorId);
+router.get(
+  "/:idProducto",
+  authenticate,
+  ProductoController.buscarProductoPorId
+);
+router.get(
+  "/:idImagen/imagen",
+  authenticate,
+  ProductoController.buscarImagenPorId
+);
 router.post("/", authenticate, ProductoController.crearProducto);
-router.patch("/:id", authenticate, ProductoController.actualizarProducto);
 router.patch(
-  "/:id/estado",
+  "/:idProducto",
+  authenticate,
+  ProductoController.actualizarProducto
+);
+router.patch(
+  "/:idProducto/estado",
   authenticate,
   ProductoController.cambiarEstadoProducto
 );
 router.delete(
-  "/:id/imagen",
+  "/:idImagen/imagen",
   authenticate,
   ProductoController.eliminarImagenProducto
 );
 router.patch(
-  "/:id/imagen",
+  "/:idImagen/imagen",
   authenticate,
   ProductoController.actualizarImagenProducto
 );

@@ -34,7 +34,7 @@ class AuthService {
     if (!result[0][0].idusuarios)
       throw new Error("No se pudo registrar el usuario.");
 
-    return (await UsuarioService.encontrarPorId(
+    return (await UsuarioService.encontrarUsuarioPorId(
       result[0][0].idusuarios
     )) as IUsuario;
   };

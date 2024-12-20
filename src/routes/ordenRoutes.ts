@@ -5,9 +5,13 @@ import { authenticate } from "../middleware/authMiddleware";
 const router = Router();
 
 router.get("/", authenticate, OrdenController.listarOrdenes);
-router.get("/:id", authenticate, OrdenController.buscarOrdenPorId);
+router.get("/:idOrden", authenticate, OrdenController.buscarOrdenPorId);
 router.post("/", authenticate, OrdenController.crearOrden);
-router.patch("/:id", authenticate, OrdenController.actualizarOrden);
-router.patch("/:id/estado", authenticate, OrdenController.cambiarEstadoOrden);
+router.patch("/:idOrden", authenticate, OrdenController.actualizarOrden);
+router.patch(
+  "/:idOrden/estado",
+  authenticate,
+  OrdenController.cambiarEstadoOrden
+);
 
 export default router;
