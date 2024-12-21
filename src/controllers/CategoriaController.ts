@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import categoriaService from "../services/CategoriaService";
 import { sendError, sendSuccess } from "../utils/asyncHandler";
 
-export class CategoriaController {
+class CategoriaController {
   listarCategorias = async (req: Request, res: Response) => {
     try {
       const categorias = await categoriaService.listarTodasCategorias();

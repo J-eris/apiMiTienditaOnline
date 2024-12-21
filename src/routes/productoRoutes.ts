@@ -2,39 +2,54 @@ import { Router } from "express";
 import ProductoController from "../controllers/ProductoController";
 import { authenticate } from "../middleware/authMiddleware";
 
-const router = Router();
+const ProductoRouter = Router();
 
-router.get("/", authenticate, ProductoController.listarProductos);
-router.get(
+ProductoRouter.get("/", authenticate, ProductoController.listarProductos);
+ProductoRouter.get(
   "/:idProducto",
   authenticate,
   ProductoController.buscarProductoPorId
 );
-router.get(
+ProductoRouter.get(
   "/:idImagen/imagen",
   authenticate,
   ProductoController.buscarImagenPorId
 );
-router.post("/", authenticate, ProductoController.crearProducto);
-router.patch(
+ProductoRouter.post("/", authenticate, ProductoController.crearProducto);
+ProductoRouter.patch(
   "/:idProducto",
   authenticate,
   ProductoController.actualizarProducto
 );
-router.patch(
+ProductoRouter.patch(
   "/:idProducto/estado",
   authenticate,
   ProductoController.cambiarEstadoProducto
 );
-router.delete(
-  "/:idImagen/imagen",
+ProductoRouter.patch(
+  "/:idProducto/stock",
   authenticate,
-  ProductoController.eliminarImagenProducto
+  ProductoController.actualizarStockProducto
 );
-router.patch(
+ProductoRouter.get(
+  "/:idProducto/detalle",
+  authenticate,
+  ProductoController.obtenerDetallesProducto
+);
+ProductoRouter.get(
+  "/:idCategoria/productos",
+  authenticate,
+  ProductoController.obtenerProductosPorCategoria
+);
+ProductoRouter.patch(
   "/:idImagen/imagen",
   authenticate,
   ProductoController.actualizarImagenProducto
 );
+ProductoRouter.delete(
+  "/:idImagen/imagen",
+  authenticate,
+  ProductoController.eliminarImagenProducto
+);
 
-export default router;
+export default ProductoRouter;

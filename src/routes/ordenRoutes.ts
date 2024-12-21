@@ -2,16 +2,21 @@ import { Router } from "express";
 import OrdenController from "../controllers/OrdenController";
 import { authenticate } from "../middleware/authMiddleware";
 
-const router = Router();
+const ordenRouter = Router();
 
-router.get("/", authenticate, OrdenController.listarOrdenes);
-router.get("/:idOrden", authenticate, OrdenController.buscarOrdenPorId);
-router.post("/", authenticate, OrdenController.crearOrden);
-router.patch("/:idOrden", authenticate, OrdenController.actualizarOrden);
-router.patch(
+ordenRouter.get("/", authenticate, OrdenController.listarOrdenes);
+ordenRouter.get("/:idOrden", authenticate, OrdenController.buscarOrdenPorId);
+ordenRouter.get(
+  "/:idOrden/detalles",
+  authenticate,
+  OrdenController.obtenerDetallesOrden
+);
+ordenRouter.post("/", authenticate, OrdenController.crearOrden);
+ordenRouter.patch("/:idOrden", authenticate, OrdenController.actualizarOrden);
+ordenRouter.patch(
   "/:idOrden/estado",
   authenticate,
   OrdenController.cambiarEstadoOrden
 );
 
-export default router;
+export default ordenRouter;

@@ -94,6 +94,25 @@ export class OrdenController {
     }
   };
 
+  obtenerDetallesOrden = async (req: Request, res: Response) => {
+    try {
+      const detalles = await ordenService.obtenerDetallesOrden(
+        parseInt(req.params.idOrden)
+      );
+
+      if (!detalles)
+        return sendError(
+          res,
+          `Detalles de la orden con id ${req.params.idOrden} no encontrados.`,
+          404
+        );
+
+      sendSuccess(res, detalles);
+    } catch (error: any) {
+      sendError(res, error.message);
+    }
+  };
+
   cambiarEstadoOrden = async (req: Request, res: Response) => {
     try {
       const {

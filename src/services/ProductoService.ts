@@ -3,6 +3,8 @@ import { IProducto, IProductoConImagenes } from "../interfaces/IProducto";
 import { IProductoImagen } from "../interfaces/IProductoImagen";
 import { ejecutarSP } from "../utils/dbUtils";
 import { ProductoImagen } from "../models/ProductoImagen";
+import { QueryTypes } from "sequelize";
+import sequelize from "../config/database";
 
 export class ProductoService {
   listarTodosProductos = async (): Promise<IProducto[]> => {
@@ -142,6 +144,59 @@ export class ProductoService {
 
     return (await this.encontrarProductoPorId(idProducto)) as IProducto;
   };
+
+  actualizarStockProducto = async (
+    idProducto: number,
+    cantidad: number,
+    incremento: boolean
+  ): Promise<Producto | null> => {
+    const productoActual = await this.encontrarProductoPorId(idProducto);
+
+    if (!productoActual) return null;
+
+    const producto = await ejecutarSP("ActualizarStockProducto", {
+      idProducto: idProducto,
+      cantidad: cantidad,
+      incremento: incremento,
+    });
+
+    if (!producto) throw new Error("No se pudo actualizar el stock.");
+
+    return (await producto[0][0]) as Producto;
+  };
+
+  obtenerDetallesProducto = async (
+    idProducto: number
+  ): Promise<IProductoConImagenes | null> => {
+    const detalles = await ejecutarSP("GetProductoDetalles", { idProducto });
+
+    return (await detalles[0]) as IProductoConImagenes;
+  };
+
+  obtenerProductosPorCategoria = async (
+    idCategoria: number
+  ): Promise<IProducto[]> => {
+    const productos = await ejecutarSP("GetProductosPorCategoria", {
+      idCategoriaProductos: idCategoria,
+    });
+
+    return (await productos[0]) as IProducto[];
+  };
+
+  // Vista para obtener los detalles de un producto
+  // obtenerDetallesProducto = async (
+  //   idProducto: number
+  // ): Promise<IProductoConImagenes[] | null> => {
+  //   const rows = await sequelize.query(
+  //     `SELECT * FROM GetProductoDetalles WHERE idProductos = ${idProducto}`,
+  //     {
+  //       replacements: { idProducto },
+  //       type: QueryTypes.SELECT,
+  //     }
+  //   );
+
+  //   return rows as IProductoConImagenes[];
+  // };
 
   eliminarImagenProducto = async (
     idImagen: number

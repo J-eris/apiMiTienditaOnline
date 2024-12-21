@@ -157,6 +157,70 @@ export class ProductoController {
     }
   };
 
+  actualizarStockProducto = async (req: Request, res: Response) => {
+    try {
+      const {
+        body,
+        params: { idProducto },
+      } = req;
+
+      if (!body.cantidad)
+        return sendError(
+          res,
+          "Datos incompletos para actualizar el stock.",
+          400
+        );
+
+      const producto = await productoService.actualizarStockProducto(
+        parseInt(idProducto),
+        body.cantidad,
+        body.incremento
+      );
+
+      if (!producto)
+        return sendError(
+          res,
+          `Producto con id ${req.params.idProducto} no encontrado.`,
+          404
+        );
+
+      sendSuccess(res, producto);
+    } catch (error: any) {
+      sendError(res, error.message);
+    }
+  };
+
+  obtenerDetallesProducto = async (req: Request, res: Response) => {
+    try {
+      const producto = await productoService.obtenerDetallesProducto(
+        parseInt(req.params.idProducto)
+      );
+
+      if (!producto)
+        return sendError(
+          res,
+          `Producto con id ${req.params.idProducto} no encontrado.`,
+          404
+        );
+
+      sendSuccess(res, producto);
+    } catch (error: any) {
+      sendError(res, error.message);
+    }
+  };
+
+  obtenerProductosPorCategoria = async (req: Request, res: Response) => {
+    try {
+      const productos = await productoService.obtenerProductosPorCategoria(
+        parseInt(req.params.idCategoria)
+      );
+
+      sendSuccess(res, productos);
+    } catch (error: any) {
+      sendError(res, error.message);
+    }
+  };
+
   eliminarImagenProducto = async (req: Request, res: Response) => {
     try {
       const imagen = await productoService.eliminarImagenProducto(

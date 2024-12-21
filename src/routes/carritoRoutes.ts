@@ -2,15 +2,19 @@ import { Router } from "express";
 import carritoController from "../controllers/CarritoController";
 import { authenticate } from "../middleware/authMiddleware";
 
-const router = Router();
+const CarritoRouter = Router();
 
-router.get("/", authenticate, carritoController.listarCarritos);
-router.get("/:idCarrito", authenticate, carritoController.buscarCarritoPorId);
-router.post("/", authenticate, carritoController.guardarCarrito);
-router.patch(
+CarritoRouter.get("/", authenticate, carritoController.listarCarritos);
+CarritoRouter.get(
+  "/:idCarrito",
+  authenticate,
+  carritoController.buscarCarritoPorId
+);
+CarritoRouter.post("/", authenticate, carritoController.guardarCarrito);
+CarritoRouter.patch(
   "/:idCarrito/estado",
   authenticate,
   carritoController.inactivarCarrito
 );
 
-export default router;
+export default CarritoRouter;

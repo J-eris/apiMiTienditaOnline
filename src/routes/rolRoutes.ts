@@ -1,14 +1,13 @@
 import { Router } from "express";
-import { RolController } from "../controllers/RolController";
+import rolController from "../controllers/RolController";
 import { authenticate } from "../middleware/authMiddleware";
 
-const router = Router();
-const rolController = new RolController();
+const RolRouter = Router();
 
-router.get("/", authenticate, rolController.listarRoles);
-router.get("/:idRol", authenticate, rolController.buscarRolPorId);
-router.post("/", authenticate, rolController.crearRol);
-router.patch("/:idRol", authenticate, rolController.actualizarRol);
-// router.patch("/:id", authenticate, rolController.eliminar);
+RolRouter.get("/", authenticate, rolController.listarRoles);
+RolRouter.get("/:idRol", authenticate, rolController.buscarRolPorId);
+RolRouter.post("/", authenticate, rolController.crearRol);
+RolRouter.patch("/:idRol", authenticate, rolController.actualizarRol);
+// RolRouter.patch("/:id", authenticate, rolController.eliminar);
 
-export default router;
+export default RolRouter;

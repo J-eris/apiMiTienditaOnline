@@ -25,5 +25,15 @@ usuarioRouter.patch(
   authenticate,
   usuarioController.inactivarUsuario
 );
+usuarioRouter.get(
+  "/:idUsuario/ordenes",
+  authenticate,
+  usuarioController.obtenerOrdenesPorUsuario
+);
+usuarioRouter.get(
+  "/:idUsuario/carritos",
+  authenticate,
+  usuarioController.obtenerCarritoUsuario
+);
 
 export default usuarioRouter;

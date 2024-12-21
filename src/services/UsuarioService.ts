@@ -2,6 +2,8 @@ import { ejecutarSP } from "../utils/dbUtils";
 import { IUsuario } from "../interfaces/IUsuario";
 import { hashPassword } from "../utils/hash";
 import { Usuario } from "../models/Usuario";
+import { IOrden } from "../interfaces/IOrden";
+import { ICarrito } from "../interfaces/ICarrito";
 
 class UsuarioService {
   listarTodosUsuarios = async (): Promise<IUsuario[]> => {
@@ -65,6 +67,26 @@ class UsuarioService {
     });
 
     return (await this.encontrarUsuarioPorId(idUsuario)) as IUsuario;
+  };
+
+  obtenerOrdenesPorUsuario = async (
+    idUsuario: number
+  ): Promise<IOrden[] | null> => {
+    const ordenes = await ejecutarSP("GetOrdenesPorUsuario", { idUsuario });
+
+    if (!ordenes) return null;
+
+    return ordenes[0] as IOrden[];
+  };
+
+  obtenerCarritoUsuario = async (
+    idUsuario: number
+  ): Promise<ICarrito[] | null> => {
+    const carrito = await ejecutarSP("GetCarritoPorUsuario", { idUsuario });
+
+    if (!carrito) return null;
+
+    return carrito[0] as ICarrito[];
   };
 
   cambiarEstadoUsuario = async (

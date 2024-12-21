@@ -1,6 +1,7 @@
 import { Orden } from "../models/Orden";
 import { IOrden, IOrdenConDetalles } from "../interfaces/IOrden";
 import { ejecutarSP } from "../utils/dbUtils";
+import { IOrdenDetalles } from "../interfaces/IOrdenDetalles";
 
 export class OrdenService {
   listarTodasOrdenes = async (): Promise<IOrden[]> => {
@@ -76,6 +77,16 @@ export class OrdenService {
     });
 
     return (await this.encontrarOrdenPorId(idOrden)) as IOrden;
+  };
+
+  obtenerDetallesOrden = async (
+    idOrden: number
+  ): Promise<IOrdenDetalles[] | null> => {
+    const detallesOrden = await ejecutarSP("GetOrdenDetalles", { idOrden });
+
+    if (!detallesOrden) return null;
+
+    return detallesOrden[0] as IOrdenDetalles[];
   };
 
   cambiarEstado = async (

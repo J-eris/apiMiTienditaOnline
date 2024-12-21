@@ -1,14 +1,21 @@
 import { Router } from "express";
-import { EstadoController } from "../controllers/EstadoController";
+import estadoController from "../controllers/EstadoController";
 import { authenticate } from "../middleware/authMiddleware";
 
-const router = Router();
-const estadoController = new EstadoController();
+const estadoRouter = Router();
 
-router.get("/", authenticate, estadoController.listarEstados);
-router.get("/:idEstado", authenticate, estadoController.buscarEstadoPorId);
-router.post("/", authenticate, estadoController.crearEstado);
-router.patch("/:idEstado", authenticate, estadoController.actualizarEstado);
-// router.patch("/:id", authenticate, estadoController.eliminar);
+estadoRouter.get("/", authenticate, estadoController.listarEstados);
+estadoRouter.get(
+  "/:idEstado",
+  authenticate,
+  estadoController.buscarEstadoPorId
+);
+estadoRouter.post("/", authenticate, estadoController.crearEstado);
+estadoRouter.patch(
+  "/:idEstado",
+  authenticate,
+  estadoController.actualizarEstado
+);
+// estadoRouter.patch("/:id", authenticate, estadoController.eliminar);
 
-export default router;
+export default estadoRouter;

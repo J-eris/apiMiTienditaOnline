@@ -1,18 +1,25 @@
 import { Router } from "express";
-import { ClienteController } from "../controllers/ClienteController";
+import clienteController from "../controllers/ClienteController";
 import { authenticate } from "../middleware/authMiddleware";
 
-const router = Router();
-const clienteController = new ClienteController();
+const clienteRouter = Router();
 
-router.get("/", authenticate, clienteController.listarClientes);
-router.get("/:idCliente", authenticate, clienteController.buscarClientePorId);
-router.post("/", authenticate, clienteController.crearCliente);
-router.patch("/:idCliente", authenticate, clienteController.actualizarCliente);
-router.patch(
+clienteRouter.get("/", authenticate, clienteController.listarClientes);
+clienteRouter.get(
+  "/:idCliente",
+  authenticate,
+  clienteController.buscarClientePorId
+);
+clienteRouter.post("/", authenticate, clienteController.crearCliente);
+clienteRouter.patch(
+  "/:idCliente",
+  authenticate,
+  clienteController.actualizarCliente
+);
+clienteRouter.patch(
   "/:idCliente/estado",
   authenticate,
   clienteController.cambiarEstadoCliente
 );
 
-export default router;
+export default clienteRouter;

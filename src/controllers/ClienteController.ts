@@ -4,7 +4,7 @@ import { sendError, sendSuccess } from "../utils/asyncHandler";
 
 const clienteService = new ClienteService();
 
-export class ClienteController {
+class ClienteController {
   listarClientes = async (req: Request, res: Response) => {
     try {
       const clientes = await clienteService.listarTodosClientes();
@@ -110,3 +110,5 @@ export class ClienteController {
     }
   }
 }
+
+export default new ClienteController();

@@ -86,6 +86,44 @@ class UsuarioController {
     }
   };
 
+  obtenerOrdenesPorUsuario = async (req: Request, res: Response) => {
+    try {
+      const ordenes = await usuarioService.obtenerOrdenesPorUsuario(
+        parseInt(req.params.idUsuario)
+      );
+
+      if (!ordenes)
+        return sendError(
+          res,
+          `Ordenes del usuario con id ${req.params.idUsuario} no encontradas.`,
+          404
+        );
+
+      sendSuccess(res, ordenes);
+    } catch (error: any) {
+      sendError(res, error.message);
+    }
+  };
+
+  obtenerCarritoUsuario = async (req: Request, res: Response) => {
+    try {
+      const carrito = await usuarioService.obtenerCarritoUsuario(
+        parseInt(req.params.idUsuario)
+      );
+
+      if (!carrito)
+        return sendError(
+          res,
+          `Carrito del usuario con id ${req.params.idUsuario} no encontrado.`,
+          404
+        );
+
+      sendSuccess(res, carrito);
+    } catch (error: any) {
+      sendError(res, error.message);
+    }
+  };
+
   inactivarUsuario = async (req: Request, res: Response) => {
     try {
       const {

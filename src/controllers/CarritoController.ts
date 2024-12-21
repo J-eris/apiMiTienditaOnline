@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import carritoService from "../services/CarritoService";
 import { sendError, sendSuccess } from "../utils/asyncHandler";
 
-export class CarritoController {
+class CarritoController {
   listarCarritos = async (req: Request, res: Response) => {
     try {
       const carritos = await carritoService.listarTodosCarritos();

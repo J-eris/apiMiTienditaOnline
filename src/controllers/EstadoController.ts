@@ -4,7 +4,7 @@ import { sendError, sendSuccess } from "../utils/asyncHandler";
 
 const estadoService = new EstadoService();
 
-export class EstadoController {
+class EstadoController {
   listarEstados = async (req: Request, res: Response) => {
     try {
       const estados = await estadoService.listarTodosEstados();
@@ -82,3 +82,5 @@ export class EstadoController {
     }
   };
 }
+
+export default new EstadoController();
