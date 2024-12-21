@@ -11,3 +11,12 @@ export interface IUsuario {
   rol_idrol?: number;
   Clientes_idClientes?: number;
 }
+
+export interface IUsuarioResponse extends Omit<IUsuario, "password"> {}
+
+export interface IUsuarioPaginado {
+  usuarios: IUsuario[];
+  totalPages: number;
+  totalItems: number;
+  currentPage: number;
+}

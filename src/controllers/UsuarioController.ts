@@ -5,7 +5,11 @@ import { sendError, sendSuccess } from "../utils/asyncHandler";
 class UsuarioController {
   listarUsuarios = async (req: Request, res: Response) => {
     try {
-      const usuarios = await usuarioService.listarTodosUsuarios();
+      const { page = 1, limit = 10 } = req.query;
+      const usuarios = await usuarioService.listarTodosUsuarios(
+        Number(page),
+        Number(limit)
+      );
       sendSuccess(res, usuarios);
     } catch (error: any) {
       sendError(res, error.message);

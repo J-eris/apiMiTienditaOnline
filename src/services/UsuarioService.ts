@@ -1,17 +1,28 @@
 import { ejecutarSP } from "../utils/dbUtils";
-import { IUsuario } from "../interfaces/IUsuario";
+import { IUsuario, IUsuarioPaginado } from "../interfaces/IUsuario";
 import { hashPassword } from "../utils/hash";
 import { Usuario } from "../models/Usuario";
 import { IOrden } from "../interfaces/IOrden";
 import { ICarrito } from "../interfaces/ICarrito";
 
 class UsuarioService {
-  listarTodosUsuarios = async (): Promise<IUsuario[]> => {
-    const usuarios = await Usuario.findAll({
+  listarTodosUsuarios = async (
+    page: number,
+    limit: number
+  ): Promise<IUsuarioPaginado> => {
+    const offset = (page - 1) * limit;
+    const usuarios = await Usuario.findAndCountAll({
       attributes: { exclude: ["password"] },
       include: ["estado", "rol", "cliente"],
+      limit,
+      offset,
     });
-    return usuarios as IUsuario[];
+    return {
+      totalPages: Math.ceil(usuarios?.count / limit),
+      totalItems: usuarios?.count,
+      currentPage: page,
+      usuarios: usuarios?.rows as IUsuario[],
+    };
   };
 
   encontrarUsuarioPorId = async (
