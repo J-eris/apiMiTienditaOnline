@@ -53,6 +53,9 @@ export class OrdenController {
       )
         return sendError(res, "Datos incompletos para crear la orden.", 400);
 
+      if (body.telefono.length !== 8)
+        return sendError(res, "Telefono debe tener 8 caracteres.");
+
       const nuevaOrden = await ordenService.crearOrdenConDetalles(body);
 
       if (!nuevaOrden) return sendError(res, `No se pudo crear la orden.`, 400);
