@@ -7,7 +7,7 @@ const JWT_SECRET = process.env.JWT_SECRET || "tu_secreto.01";
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH || "tu_secreto.02";
 
 const generarToken = (payload: object): string => {
-  return sign(payload, JWT_SECRET, { expiresIn: "7d" });
+  return sign(payload, JWT_SECRET, { expiresIn: "24h" });
 };
 
 const generarNuevoToken = (payload: object): string => {
