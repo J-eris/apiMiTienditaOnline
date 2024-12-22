@@ -1,17 +1,36 @@
 import { Orden } from "../models/Orden";
-import { IOrden, IOrdenConDetalles } from "../interfaces/IOrden";
+import {
+  IOrden,
+  IOrdenConDetalles,
+  IOrdenPaginado,
+} from "../interfaces/IOrden";
 import { ejecutarSP } from "../utils/dbUtils";
 import { IOrdenDetalles } from "../interfaces/IOrdenDetalles";
 
 export class OrdenService {
-  listarTodasOrdenes = async (): Promise<IOrden[]> => {
-    return await Orden.findAll({
+  listarTodasOrdenes = async (
+    page: number,
+    limit: number
+  ): Promise<IOrdenPaginado> => {
+    const offset = (page - 1) * limit;
+    const totalItems = await Orden.count();
+
+    const ordenes = await Orden.findAll({
       include: [
         { association: "usuario", attributes: { exclude: ["password"] } },
         { association: "estado" },
         { association: "detallesOrden", include: ["producto"] },
       ],
+      limit,
+      offset,
     });
+
+    return {
+      totalPages: Math.ceil(totalItems / limit),
+      totalItems,
+      currentPage: page,
+      ordenes: ordenes as IOrden[],
+    };
   };
 
   encontrarOrdenPorId = async (id: number): Promise<IOrden | null> => {

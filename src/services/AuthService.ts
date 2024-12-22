@@ -1,11 +1,10 @@
 import { IUsuario } from "../interfaces/IUsuario";
-import { IUsuarioResponse } from "../interfaces/IUsuarioResponse";
+import { IUsuarioResponse } from "../interfaces/IUsuario";
 import { Usuario } from "../models/Usuario";
 import { compararPassword, hashPassword } from "../utils/hash";
 import { generarToken } from "../utils/jwt";
 import { ILoginResponse } from "../interfaces/ILogin";
 import { ejecutarSP } from "../utils/dbUtils";
-import UsuarioService from "./UsuarioService";
 
 class AuthService {
   registrarNuevoUsuario = async (

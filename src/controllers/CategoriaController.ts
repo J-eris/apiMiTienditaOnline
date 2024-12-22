@@ -5,7 +5,12 @@ import { sendError, sendSuccess } from "../utils/asyncHandler";
 class CategoriaController {
   listarCategorias = async (req: Request, res: Response) => {
     try {
-      const categorias = await categoriaService.listarTodasCategorias();
+      const { page = 1, limit = 10 } = req.query;
+
+      const categorias = await categoriaService.listarTodasCategorias(
+        Number(page),
+        Number(limit)
+      );
       sendSuccess(res, categorias);
     } catch (error: any) {
       sendError(res, error.message);

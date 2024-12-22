@@ -1,10 +1,23 @@
 import { Estado } from "../models/Estado";
-import { IEstado } from "../interfaces/IEstado";
+import { IEstado, IEstadoPaginado } from "../interfaces/IEstado";
 import { ejecutarSP } from "../utils/dbUtils";
 
 export class EstadoService {
-  async listarTodosEstados(): Promise<IEstado[]> {
-    return await Estado.findAll();
+  async listarTodosEstados(
+    page: number,
+    limit: number
+  ): Promise<IEstadoPaginado> {
+    const offset = (page - 1) * limit;
+    const totalItems = await Estado.count();
+
+    const estados = await Estado.findAll({ limit, offset });
+
+    return {
+      totalPages: Math.ceil(totalItems / limit),
+      totalItems,
+      currentPage: page,
+      estados: estados as IEstado[],
+    };
   }
 
   encontrarEstadoPorId = async (idEstado: number): Promise<IEstado | null> => {

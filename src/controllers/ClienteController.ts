@@ -7,7 +7,12 @@ const clienteService = new ClienteService();
 class ClienteController {
   listarClientes = async (req: Request, res: Response) => {
     try {
-      const clientes = await clienteService.listarTodosClientes();
+      const { page = 1, limit = 10 } = req.query;
+
+      const clientes = await clienteService.listarTodosClientes(
+        Number(page),
+        Number(limit)
+      );
       sendSuccess(res, clientes);
     } catch (error: any) {
       sendError(res, error.message);

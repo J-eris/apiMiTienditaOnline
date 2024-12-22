@@ -7,3 +7,10 @@ export interface ICliente {
   email?: string;
   estado_idestado?: number;
 }
+
+export interface IClientePaginado {
+  clientes: ICliente[];
+  totalPages: number;
+  totalItems: number;
+  currentPage: number;
+}

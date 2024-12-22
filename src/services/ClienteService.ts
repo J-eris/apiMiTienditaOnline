@@ -1,12 +1,27 @@
 import { Cliente } from "../models/Cliente";
-import { ICliente } from "../interfaces/ICliente";
+import { ICliente, IClientePaginado } from "../interfaces/ICliente";
 import { ejecutarSP } from "../utils/dbUtils";
 
 export class ClienteService {
-  listarTodosClientes = async (): Promise<ICliente[]> => {
-    return await Cliente.findAll({
+  listarTodosClientes = async (
+    page: number,
+    limit: number
+  ): Promise<IClientePaginado> => {
+    const offset = (page - 1) * limit;
+    const totalItems = await Cliente.count();
+
+    const clientes = await Cliente.findAll({
       include: ["estado"],
+      limit,
+      offset,
     });
+
+    return {
+      totalPages: Math.ceil(totalItems / limit),
+      totalItems,
+      currentPage: page,
+      clientes: clientes as ICliente[],
+    };
   };
 
   encontrarClientePorId = async (

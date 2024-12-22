@@ -14,6 +14,13 @@ export interface IOrden {
   total_orden: number;
 }
 
+export interface IOrdenPaginado {
+  ordenes: IOrden[];
+  totalPages: number;
+  totalItems: number;
+  currentPage: number;
+}
+
 export interface IOrdenConDetalles extends IOrden {
   detalles: IOrdenDetalles[];
 }

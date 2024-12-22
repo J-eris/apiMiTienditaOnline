@@ -1,4 +1,4 @@
-import { IUsuarioResponse } from "./IUsuarioResponse";
+import { IUsuarioResponse } from "./IUsuario";
 
 export interface ILoginResponse {
   token: string;

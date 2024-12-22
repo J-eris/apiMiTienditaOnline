@@ -5,7 +5,12 @@ import { sendError, sendSuccess } from "../utils/asyncHandler";
 export class ProductoController {
   listarProductos = async (req: Request, res: Response) => {
     try {
-      const productos = await productoService.listarTodosProductos();
+      const { page = 1, limit = 10 } = req.query;
+
+      const productos = await productoService.listarTodosProductos(
+        Number(page),
+        Number(limit)
+      );
       sendSuccess(res, productos);
     } catch (error: any) {
       sendError(res, error.message);

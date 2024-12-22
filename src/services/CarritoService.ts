@@ -1,11 +1,17 @@
 import { Carrito } from "../models/Carrito";
-import { ICarrito } from "../interfaces/ICarrito";
+import { ICarrito, ICarritoPaginado } from "../interfaces/ICarrito";
 import { ejecutarSP } from "../utils/dbUtils";
-import { ICarritoConDetalles } from "../interfaces/ICarritoConDetalles";
+import { ICarritoConDetalles } from "../interfaces/ICarrito";
 
 export class CarritoService {
-  listarTodosCarritos = async (): Promise<ICarrito[]> => {
-    return await Carrito.findAll({
+  listarTodosCarritos = async (
+    page: number,
+    limit: number
+  ): Promise<ICarritoPaginado> => {
+    const offset = (page - 1) * limit;
+    const totalItems = await Carrito.count();
+
+    const carritos = await Carrito.findAll({
       include: [
         {
           association: "usuario",
@@ -14,7 +20,16 @@ export class CarritoService {
         { association: "estado" },
         { association: "detallesCarrito", include: ["producto"] },
       ],
+      limit,
+      offset,
     });
+
+    return {
+      totalPages: Math.ceil(totalItems / limit),
+      totalItems,
+      currentPage: page,
+      carritos: carritos as ICarrito[],
+    };
   };
 
   encontrarCarritoPorId = async (

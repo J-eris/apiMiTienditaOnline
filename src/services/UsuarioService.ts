@@ -11,17 +11,19 @@ class UsuarioService {
     limit: number
   ): Promise<IUsuarioPaginado> => {
     const offset = (page - 1) * limit;
-    const usuarios = await Usuario.findAndCountAll({
+    const totalItems = await Usuario.count();
+
+    const usuarios = await Usuario.findAll({
       attributes: { exclude: ["password"] },
       include: ["estado", "rol", "cliente"],
       limit,
       offset,
     });
     return {
-      totalPages: Math.ceil(usuarios?.count / limit),
-      totalItems: usuarios?.count,
+      totalPages: Math.ceil(totalItems / limit),
+      totalItems,
       currentPage: page,
-      usuarios: usuarios?.rows as IUsuario[],
+      usuarios: usuarios as IUsuario[],
     };
   };
 

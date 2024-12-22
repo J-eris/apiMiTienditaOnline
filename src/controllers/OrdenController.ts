@@ -5,7 +5,12 @@ import { sendError, sendSuccess } from "../utils/asyncHandler";
 export class OrdenController {
   listarOrdenes = async (req: Request, res: Response) => {
     try {
-      const ordenes = await ordenService.listarTodasOrdenes();
+      const { page = 1, limit = 10 } = req.query;
+
+      const ordenes = await ordenService.listarTodasOrdenes(
+        Number(page),
+        Number(limit)
+      );
       sendSuccess(res, ordenes);
     } catch (error: any) {
       sendError(res, error.message);

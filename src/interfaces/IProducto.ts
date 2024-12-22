@@ -14,6 +14,13 @@ export interface IProducto {
   estado_idestado: number;
 }
 
+export interface IProductoPaginado {
+  productos: IProducto[];
+  totalPages: number;
+  totalItems: number;
+  currentPage: number;
+}
+
 export interface IProductoConImagenes extends IProducto {
   imagenes: IProductoImagen[];
 }

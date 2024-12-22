@@ -1,10 +1,23 @@
 import { Rol } from "../models/Rol";
-import { IRol } from "../interfaces/IRol";
+import { IRol, IRolPaginado } from "../interfaces/IRol";
 import { ejecutarSP } from "../utils/dbUtils";
 
 export class RolService {
-  async listarTodosRoles(): Promise<IRol[]> {
-    return await Rol.findAll();
+  async listarTodosRoles(page: number, limit: number): Promise<IRolPaginado> {
+    const offset = (page - 1) * limit;
+    const totalItems = await Rol.count();
+
+    const roles = await Rol.findAll({
+      limit,
+      offset,
+    });
+
+    return {
+      totalPages: Math.ceil(totalItems / limit),
+      totalItems,
+      currentPage: page,
+      roles: roles as IRol[],
+    };
   }
 
   encontrarRolPorId = async (idRol: number): Promise<IRol | null> => {

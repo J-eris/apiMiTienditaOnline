@@ -7,7 +7,12 @@ const rolService = new RolService();
 export class RolController {
   listarRoles = async (req: Request, res: Response) => {
     try {
-      const roles = await rolService.listarTodosRoles();
+      const { page = 1, limit = 10 } = req.query;
+
+      const roles = await rolService.listarTodosRoles(
+        Number(page),
+        Number(limit)
+      );
       sendSuccess(res, roles);
     } catch (error: any) {
       sendError(res, error.message);

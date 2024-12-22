@@ -1,5 +1,9 @@
 import { Producto } from "../models/Producto";
-import { IProducto, IProductoConImagenes } from "../interfaces/IProducto";
+import {
+  IProducto,
+  IProductoConImagenes,
+  IProductoPaginado,
+} from "../interfaces/IProducto";
 import { IProductoImagen } from "../interfaces/IProductoImagen";
 import { ejecutarSP } from "../utils/dbUtils";
 import { ProductoImagen } from "../models/ProductoImagen";
@@ -7,16 +11,30 @@ import { QueryTypes } from "sequelize";
 import sequelize from "../config/database";
 
 export class ProductoService {
-  listarTodosProductos = async (): Promise<IProducto[]> => {
-    return await Producto.findAll({
+  listarTodosProductos = async (
+    page: number,
+    limit: number
+  ): Promise<IProductoPaginado> => {
+    const offset = (page - 1) * limit;
+    const totalItems = await Producto.count();
+
+    const productos = await Producto.findAll({
       include: [
         { association: "categoriaProducto" },
         { association: "usuario", attributes: { exclude: ["password"] } },
         { association: "estado" },
         { association: "imagenes" },
-        { association: "ordenDetalles" },
       ],
+      limit,
+      offset,
     });
+
+    return {
+      totalPages: Math.ceil(totalItems / limit),
+      totalItems,
+      currentPage: page,
+      productos: productos as IProducto[],
+    };
   };
 
   encontrarProductoPorId = async (

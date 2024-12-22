@@ -6,6 +6,7 @@ class UsuarioController {
   listarUsuarios = async (req: Request, res: Response) => {
     try {
       const { page = 1, limit = 10 } = req.query;
+
       const usuarios = await usuarioService.listarTodosUsuarios(
         Number(page),
         Number(limit)

@@ -5,7 +5,12 @@ import { sendError, sendSuccess } from "../utils/asyncHandler";
 class CarritoController {
   listarCarritos = async (req: Request, res: Response) => {
     try {
-      const carritos = await carritoService.listarTodosCarritos();
+      const { page = 1, limit = 10 } = req.query;
+
+      const carritos = await carritoService.listarTodosCarritos(
+        Number(page),
+        Number(limit)
+      );
       sendSuccess(res, carritos);
     } catch (error: any) {
       sendError(res, error.message);

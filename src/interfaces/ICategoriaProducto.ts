@@ -5,3 +5,10 @@ export interface ICategoriaProducto {
   fecha_actualizacion: Date;
   estado_idestado: number;
 }
+
+export interface ICategoriaProductoPaginado {
+  categorias: ICategoriaProducto[];
+  totalPages: number;
+  totalItems: number;
+  currentPage: number;
+}

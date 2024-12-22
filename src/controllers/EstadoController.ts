@@ -7,7 +7,12 @@ const estadoService = new EstadoService();
 class EstadoController {
   listarEstados = async (req: Request, res: Response) => {
     try {
-      const estados = await estadoService.listarTodosEstados();
+      const { page = 1, limit = 10 } = req.query;
+
+      const estados = await estadoService.listarTodosEstados(
+        Number(page),
+        Number(limit)
+      );
       sendSuccess(res, estados);
     } catch (error: any) {
       sendError(res, error.message);

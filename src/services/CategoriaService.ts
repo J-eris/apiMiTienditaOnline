@@ -1,12 +1,30 @@
 import { CategoriaProducto } from "../models/CategoriaProducto";
-import { ICategoriaProducto } from "../interfaces/ICategoriaProducto";
+import {
+  ICategoriaProducto,
+  ICategoriaProductoPaginado,
+} from "../interfaces/ICategoriaProducto";
 import { ejecutarSP } from "../utils/dbUtils";
 
 export class CategoriaService {
-  listarTodasCategorias = async (): Promise<ICategoriaProducto[]> => {
-    return await CategoriaProducto.findAll({
+  listarTodasCategorias = async (
+    page: number,
+    limit: number
+  ): Promise<ICategoriaProductoPaginado> => {
+    const offset = (page - 1) * limit;
+    const totalItems = await CategoriaProducto.count();
+
+    const categorias = await CategoriaProducto.findAll({
       include: ["estado", "productos"],
+      limit,
+      offset,
     });
+
+    return {
+      totalPages: Math.ceil(totalItems / limit),
+      totalItems,
+      currentPage: page,
+      categorias: categorias as ICategoriaProducto[],
+    };
   };
 
   encontrarCategoriaPorId = async (
