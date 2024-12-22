@@ -4,6 +4,12 @@ import { authenticate } from "../middleware/authMiddleware";
 
 const ordenRouter = Router();
 
+ordenRouter.get(
+  "/totalQuetzalesAgosto",
+  authenticate,
+  OrdenController.obtenerTotalQuetzalesAgosto
+);
+
 ordenRouter.get("/", authenticate, OrdenController.listarOrdenes);
 ordenRouter.get("/:idOrden", authenticate, OrdenController.buscarOrdenPorId);
 ordenRouter.get(

@@ -4,7 +4,7 @@ import {
   IOrdenConDetalles,
   IOrdenPaginado,
 } from "../interfaces/IOrden";
-import { ejecutarSP } from "../utils/dbUtils";
+import { ejecutarSP, ejecutarVista } from "../utils/dbUtils";
 import { IOrdenDetalles } from "../interfaces/IOrdenDetalles";
 
 export class OrdenService {
@@ -106,6 +106,12 @@ export class OrdenService {
     if (!detallesOrden) return null;
 
     return detallesOrden[0] as IOrdenDetalles[];
+  };
+
+  ObtenerTotalQuetzalesAgosto = async (): Promise<number> => {
+    const total = await ejecutarVista("TotalQuetzalesOrdenesAgosto2024");
+
+    return total[0];
   };
 
   cambiarEstado = async (

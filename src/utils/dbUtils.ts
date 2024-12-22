@@ -15,3 +15,8 @@ export const ejecutarSP = async (
   const query = `EXEC ${spName} ${formattedParams}`;
   return await sequelize.query(query, { type: QueryTypes.RAW });
 };
+
+export const ejecutarVista = async (VistaNme: string): Promise<any> => {
+  const query = `SELECT * FROM ${VistaNme}`;
+  return await sequelize.query(query, { type: QueryTypes.SELECT });
+};

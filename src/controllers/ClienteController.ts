@@ -19,7 +19,7 @@ class ClienteController {
     }
   };
 
-  async buscarClientePorId(req: Request, res: Response) {
+  buscarClientePorId = async (req: Request, res: Response) => {
     try {
       const cliente = await clienteService.encontrarClientePorId(
         parseInt(req.params.idCliente)
@@ -36,9 +36,9 @@ class ClienteController {
     } catch (error: any) {
       sendError(res, error.message);
     }
-  }
+  };
 
-  async crearCliente(req: Request, res: Response) {
+  crearCliente = async (req: Request, res: Response) => {
     try {
       const { body } = req;
 
@@ -53,9 +53,9 @@ class ClienteController {
     } catch (error: any) {
       sendError(res, error.message);
     }
-  }
+  };
 
-  async actualizarCliente(req: Request, res: Response) {
+  actualizarCliente = async (req: Request, res: Response) => {
     try {
       const {
         body,
@@ -85,9 +85,18 @@ class ClienteController {
     } catch (error: any) {
       sendError(res, error.message);
     }
-  }
+  };
 
-  async cambiarEstadoCliente(req: Request, res: Response) {
+  obtener10ClientesMayorConsumo = async (req: Request, res: Response) => {
+    try {
+      const clientes = await clienteService.obtener10ClientesMayorConsumo();
+      sendSuccess(res, clientes);
+    } catch (error: any) {
+      sendError(res, error.message);
+    }
+  };
+
+  cambiarEstadoCliente = async (req: Request, res: Response) => {
     try {
       const {
         body,
@@ -113,7 +122,7 @@ class ClienteController {
     } catch (error: any) {
       sendError(res, error.message);
     }
-  }
+  };
 }
 
 export default new ClienteController();

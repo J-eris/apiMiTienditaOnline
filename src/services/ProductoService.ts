@@ -5,7 +5,7 @@ import {
   IProductoPaginado,
 } from "../interfaces/IProducto";
 import { IProductoImagen } from "../interfaces/IProductoImagen";
-import { ejecutarSP } from "../utils/dbUtils";
+import { ejecutarSP, ejecutarVista } from "../utils/dbUtils";
 import { ProductoImagen } from "../models/ProductoImagen";
 import { QueryTypes } from "sequelize";
 import sequelize from "../config/database";
@@ -201,20 +201,15 @@ export class ProductoService {
     return (await productos[0]) as IProducto[];
   };
 
-  // Vista para obtener los detalles de un producto
-  // obtenerDetallesProducto = async (
-  //   idProducto: number
-  // ): Promise<IProductoConImagenes[] | null> => {
-  //   const rows = await sequelize.query(
-  //     `SELECT * FROM GetProductoDetalles WHERE idProductos = ${idProducto}`,
-  //     {
-  //       replacements: { idProducto },
-  //       type: QueryTypes.SELECT,
-  //     }
-  //   );
+  obtenerTotalProductosActivos = async (): Promise<number> => {
+    const total = await ejecutarVista("TotalProductosActivosConStock");
+    return total[0];
+  };
 
-  //   return rows as IProductoConImagenes[];
-  // };
+  obtenerProductosMasVendidos = async (): Promise<IProducto[]> => {
+    const productos = await ejecutarVista("Top10ProductosMasVendidos");
+    return await productos;
+  };
 
   eliminarImagenProducto = async (
     idImagen: number

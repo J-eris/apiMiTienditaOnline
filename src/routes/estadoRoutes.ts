@@ -16,6 +16,5 @@ estadoRouter.patch(
   authenticate,
   estadoController.actualizarEstado
 );
-// estadoRouter.patch("/:id", authenticate, estadoController.eliminar);
 
 export default estadoRouter;

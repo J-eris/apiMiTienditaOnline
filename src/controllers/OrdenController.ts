@@ -118,6 +118,15 @@ export class OrdenController {
     }
   };
 
+  obtenerTotalQuetzalesAgosto = async (req: Request, res: Response) => {
+    try {
+      const total = await ordenService.ObtenerTotalQuetzalesAgosto();
+      sendSuccess(res, total);
+    } catch (error: any) {
+      sendError(res, error.message);
+    }
+  };
+
   cambiarEstadoOrden = async (req: Request, res: Response) => {
     try {
       const {

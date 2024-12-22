@@ -1,10 +1,6 @@
 import { Request, Response } from "express";
 
-const sendSuccess = (
-  res: Response,
-  data: any,
-  statusCode: number = 200
-) => {
+const sendSuccess = (res: Response, data: any, statusCode: number = 200) => {
   res.status(statusCode).json({
     success: true,
     data: data,

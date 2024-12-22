@@ -1,6 +1,6 @@
 import { Cliente } from "../models/Cliente";
 import { ICliente, IClientePaginado } from "../interfaces/ICliente";
-import { ejecutarSP } from "../utils/dbUtils";
+import { ejecutarSP, ejecutarVista } from "../utils/dbUtils";
 
 export class ClienteService {
   listarTodosClientes = async (
@@ -80,6 +80,11 @@ export class ClienteService {
     });
 
     return (await this.encontrarClientePorId(idCliente)) as ICliente;
+  };
+
+  obtener10ClientesMayorConsumo = async (): Promise<ICliente[]> => {
+    const clientes = await ejecutarVista("Top10ClientesMayorConsumo");
+    return clientes;
   };
 
   cambiarEstadoCliente = async (

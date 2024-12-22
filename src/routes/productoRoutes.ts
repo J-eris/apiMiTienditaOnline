@@ -4,6 +4,17 @@ import { authenticate } from "../middleware/authMiddleware";
 
 const ProductoRouter = Router();
 
+ProductoRouter.get(
+  "/total/activos",
+  authenticate,
+  ProductoController.obtenerTotalProductosActivos
+);
+ProductoRouter.get(
+  "/masVendidos",
+  authenticate,
+  ProductoController.obtener10ProductosMasVendidos
+);
+
 ProductoRouter.get("/", authenticate, ProductoController.listarProductos);
 ProductoRouter.get(
   "/:idProducto",

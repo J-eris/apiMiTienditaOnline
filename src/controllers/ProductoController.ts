@@ -216,9 +216,32 @@ export class ProductoController {
 
   obtenerProductosPorCategoria = async (req: Request, res: Response) => {
     try {
+      console.log("Obteniendo productos por categoria");
       const productos = await productoService.obtenerProductosPorCategoria(
         parseInt(req.params.idCategoria)
       );
+
+      sendSuccess(res, productos);
+    } catch (error: any) {
+      sendError(res, error.message);
+    }
+  };
+
+  obtenerTotalProductosActivos = async (req: Request, res: Response) => {
+    try {
+      console.log("Obteniendo total de productos activos");
+      const total = await productoService.obtenerTotalProductosActivos();
+
+      sendSuccess(res, total);
+    } catch (error: any) {
+      sendError(res, error.message);
+    }
+  };
+
+  obtener10ProductosMasVendidos = async (req: Request, res: Response) => {
+    try {
+      console.log("Obteniendo 10 productos más vendidos");
+      const productos = await productoService.obtenerProductosMasVendidos();
 
       sendSuccess(res, productos);
     } catch (error: any) {

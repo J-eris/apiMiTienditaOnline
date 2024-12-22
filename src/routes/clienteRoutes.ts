@@ -4,6 +4,12 @@ import { authenticate } from "../middleware/authMiddleware";
 
 const clienteRouter = Router();
 
+clienteRouter.get(
+  "/clientesMayorConsumo",
+  authenticate,
+  clienteController.obtener10ClientesMayorConsumo
+);
+
 clienteRouter.get("/", authenticate, clienteController.listarClientes);
 clienteRouter.get(
   "/:idCliente",
