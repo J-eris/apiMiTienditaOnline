@@ -1,3 +1,5 @@
+import { IRol } from "./IRol";
+
 export interface IUsuario {
   idusuarios: number;
   correo_electronico: string;
@@ -10,6 +12,7 @@ export interface IUsuario {
   estado_idestado?: number;
   rol_idrol?: number;
   Clientes_idClientes?: number;
+  rol?: IRol;
 }
 
 export interface IUsuarioResponse extends Omit<IUsuario, "password"> {}
