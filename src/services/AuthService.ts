@@ -5,6 +5,7 @@ import { compararPassword, hashPassword } from "../utils/hash";
 import { generarToken } from "../utils/jwt";
 import { ILoginResponse } from "../interfaces/ILogin";
 import { ejecutarSP } from "../utils/dbUtils";
+import UsuarioService from "./UsuarioService";
 
 class AuthService {
   registrarNuevoUsuario = async (
@@ -13,9 +14,9 @@ class AuthService {
       "idusuarios" | "fecha_creacion" | "fecha_actualizacion"
     >
   ): Promise<IUsuario | null> => {
-    const usuarioExistente = await Usuario.findOne({
-      where: { correo_electronico: data.correo_electronico },
-    });
+    const usuarioExistente = await UsuarioService.encontrarUsuarioPorCorreo(
+      data.correo_electronico
+    );
     if (usuarioExistente) return null;
 
     const hashedPassword = await hashPassword(data.password);
@@ -39,9 +40,7 @@ class AuthService {
     email: string,
     password: string
   ): Promise<ILoginResponse | null> => {
-    const usuario = await Usuario.findOne({
-      where: { correo_electronico: email },
-    });
+    const usuario = await UsuarioService.encontrarUsuarioPorCorreo(email);
 
     if (!usuario) return null;
 

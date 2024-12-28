@@ -44,7 +44,7 @@ class UsuarioService {
     correo: string
   ): Promise<IUsuario | null> => {
     const result = await Usuario.findOne({
-      attributes: { exclude: ["password"] },
+      include: ["estado", "rol", "cliente"],
       where: { correo_electronico: correo },
     });
 
