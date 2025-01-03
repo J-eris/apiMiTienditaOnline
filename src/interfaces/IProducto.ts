@@ -12,6 +12,7 @@ export interface IProducto {
   fecha_creacion: Date;
   fecha_actualizacion: Date;
   estado_idestado: number;
+  imagenes?: IProductoImagen[];
 }
 
 export interface IProductoPaginado {

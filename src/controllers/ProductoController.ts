@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import productoService from "../services/ProductoService";
 import { sendError, sendSuccess } from "../utils/asyncHandler";
+import fs from "fs";
+import path from "path";
 
 export class ProductoController {
   listarProductos = async (req: Request, res: Response) => {
@@ -62,9 +64,19 @@ export class ProductoController {
       if (!body.nombre || !body.codigo)
         return sendError(res, "Datos incompletos para crear el producto.", 400);
 
-      const nuevoProducto = await productoService.crearProductoConImagenes(
-        body
-      );
+      let imagenesJSON = null;
+      if (req.files && Array.isArray(req.files) && req.files.length > 0) {
+        const imagenes = (req.files as Express.Multer.File[]).map((imagen) => ({
+          ruta_imagen: `/public/uploads/${imagen.filename}`,
+          descripcion: imagen.originalname,
+        }));
+        imagenesJSON = JSON.stringify({ imagenes });
+      }
+
+      const nuevoProducto = await productoService.crearProductoConImagenes({
+        ...body,
+        imagenes: imagenesJSON,
+      });
 
       if (!nuevoProducto) return sendError(res, `Producto ya existe.`, 400);
 
@@ -75,22 +87,56 @@ export class ProductoController {
   };
 
   actualizarProducto = async (req: Request, res: Response) => {
-    const {
-      body,
-      params: { idProducto },
-    } = req;
-
-    if (!body.codigo)
-      return sendError(
-        res,
-        "Datos incompletos para actualizar el producto.",
-        400
-      );
-
     try {
+      const {
+        body,
+        params: { idProducto },
+      } = req;
+
+      if (!body.codigo)
+        return sendError(
+          res,
+          "Datos incompletos para actualizar el producto.",
+          400
+        );
+
+      let imagenesJSON = null;
+      if (req.files && Array.isArray(req.files) && req.files.length > 0) {
+        const nuevasImagenes = (req.files as Express.Multer.File[]).map(
+          (imagen) => ({
+            ruta_imagen: `/public/uploads/${imagen.filename}`,
+            descripcion: imagen.originalname,
+          })
+        );
+        imagenesJSON = JSON.stringify({ nuevasImagenes });
+
+        const productoActual = await productoService.encontrarProductoPorId(
+          parseInt(idProducto)
+        );
+        if (productoActual && productoActual.imagenes) {
+          const imagenesAntiguas = productoActual.imagenes;
+          imagenesAntiguas.forEach((imagen: any) => {
+            const rutaImagen = path.join(
+              __dirname,
+              `../public${imagen.ruta_imagen}`
+            );
+            fs.unlink(rutaImagen, (err) => {
+              if (err) {
+                console.error(`Error al eliminar imagen: ${rutaImagen}`, err);
+                return;
+              }
+            });
+          });
+        }
+      }
+
+      const DatosActualizados = imagenesJSON
+        ? { ...body, imagenes: imagenesJSON }
+        : body;
+
       const productoActualizado = await productoService.actualizarProducto(
         parseInt(idProducto),
-        body
+        DatosActualizados
       );
 
       if (!productoActualizado)
@@ -216,7 +262,6 @@ export class ProductoController {
 
   obtenerProductosPorCategoria = async (req: Request, res: Response) => {
     try {
-      console.log("Obteniendo productos por categoria");
       const productos = await productoService.obtenerProductosPorCategoria(
         parseInt(req.params.idCategoria)
       );
@@ -229,7 +274,6 @@ export class ProductoController {
 
   obtenerTotalProductosActivos = async (req: Request, res: Response) => {
     try {
-      console.log("Obteniendo total de productos activos");
       const total = await productoService.obtenerTotalProductosActivos();
 
       sendSuccess(res, total);
@@ -240,7 +284,6 @@ export class ProductoController {
 
   obtener10ProductosMasVendidos = async (req: Request, res: Response) => {
     try {
-      console.log("Obteniendo 10 productos más vendidos");
       const productos = await productoService.obtenerProductosMasVendidos();
 
       sendSuccess(res, productos);

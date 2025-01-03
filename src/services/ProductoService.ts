@@ -69,17 +69,11 @@ export class ProductoService {
       "idProductos" | "fecha_creacion" | "fecha_actualizacion"
     >
   ): Promise<IProducto | null> => {
-    console.log(data);
     try {
       const productoExistente = await this.encontrarPorCodigo(
         data.codigo || ""
       );
-
       if (productoExistente) return null;
-
-      const imagenesJSON = data.imagenes
-        ? JSON.stringify({ imagenes: data.imagenes })
-        : null;
 
       const producto = await ejecutarSP("InsertProductoConImagenes", {
         CategoriaProductos_idCategoriaProductos:
@@ -91,7 +85,7 @@ export class ProductoService {
         stock: data.stock,
         precio: data.precio,
         estado_idestado: data.estado_idestado,
-        imagenes: imagenesJSON,
+        imagenes: data.imagenes,
       });
 
       if (!producto[0][0].idProductos)
@@ -107,7 +101,7 @@ export class ProductoService {
 
   actualizarProducto = async (
     idProducto: number,
-    data: Partial<IProducto>
+    data: Partial<IProductoConImagenes>
   ): Promise<IProducto | null> => {
     const productoActual = await this.encontrarProductoPorId(idProducto);
 
@@ -124,6 +118,7 @@ export class ProductoService {
         data.CategoriaProductos_idCategoriaProductos,
       usuarios_idusuarios: data.usuarios_idusuarios,
       estado_idestado: data.estado_idestado,
+      imagenes: data.imagenes,
     });
 
     return (await this.encontrarProductoPorId(idProducto)) as IProducto;

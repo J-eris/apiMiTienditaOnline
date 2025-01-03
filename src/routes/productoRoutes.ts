@@ -1,6 +1,7 @@
 import { Router } from "express";
 import ProductoController from "../controllers/ProductoController";
 import { authenticate } from "../middleware/authMiddleware";
+import { upload } from "../middleware/multerConfig";
 
 const ProductoRouter = Router();
 
@@ -26,7 +27,12 @@ ProductoRouter.get(
   authenticate,
   ProductoController.buscarImagenPorId
 );
-ProductoRouter.post("/", authenticate, ProductoController.crearProducto);
+ProductoRouter.post(
+  "/",
+  authenticate,
+  upload,
+  ProductoController.crearProducto
+);
 ProductoRouter.patch(
   "/:idProducto",
   authenticate,
