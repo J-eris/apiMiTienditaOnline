@@ -4,6 +4,7 @@ import routes from "./routes/index";
 import dotenv from "dotenv";
 import { errorMiddleware } from "./middleware/errorMiddleware";
 import corsConfig from "./config/corsConfig";
+import path from "path";
 
 dotenv.config();
 
@@ -11,6 +12,8 @@ const app = express();
 app.use(express.json());
 
 app.use(corsConfig);
+
+app.use("/public", express.static(path.join(__dirname, "../public")));
 
 app.use("/api", routes);
 
