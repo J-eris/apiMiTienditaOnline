@@ -66,11 +66,11 @@ export const upload = (req: Request, res: Response, next: NextFunction) => {
       });
     }
 
-    if (!req.files || (req.files as Express.Multer.File[]).length === 0) {
-      return res.status(400).json({
-        message: "No se ha seleccionado ningún archivo compatible.",
-      });
-    }
+    // if (!req.files || (req.files as Express.Multer.File[]).length === 0) {
+    //   return res.status(400).json({
+    //     message: "No se ha seleccionado ningún archivo compatible.",
+    //   });
+    // }
 
     next();
   });

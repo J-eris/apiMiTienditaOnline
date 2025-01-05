@@ -102,13 +102,11 @@ export class ProductoController {
 
       let imagenesJSON = null;
       if (req.files && Array.isArray(req.files) && req.files.length > 0) {
-        const nuevasImagenes = (req.files as Express.Multer.File[]).map(
-          (imagen) => ({
-            ruta_imagen: `/public/uploads/${imagen.filename}`,
-            descripcion: imagen.originalname,
-          })
-        );
-        imagenesJSON = JSON.stringify({ nuevasImagenes });
+        const imagenes = (req.files as Express.Multer.File[]).map((imagen) => ({
+          ruta_imagen: `/public/uploads/${imagen.filename}`,
+          descripcion: imagen.originalname,
+        }));
+        imagenesJSON = JSON.stringify({ imagenes });
 
         const productoActual = await productoService.encontrarProductoPorId(
           parseInt(idProducto)
@@ -118,7 +116,7 @@ export class ProductoController {
           imagenesAntiguas.forEach((imagen: any) => {
             const rutaImagen = path.join(
               __dirname,
-              `../public${imagen.ruta_imagen}`
+              `../../${imagen.ruta_imagen}`
             );
             fs.unlink(rutaImagen, (err) => {
               if (err) {

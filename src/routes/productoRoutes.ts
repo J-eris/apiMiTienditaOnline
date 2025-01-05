@@ -36,6 +36,7 @@ ProductoRouter.post(
 ProductoRouter.patch(
   "/:idProducto",
   authenticate,
+  upload,
   ProductoController.actualizarProducto
 );
 ProductoRouter.patch(
