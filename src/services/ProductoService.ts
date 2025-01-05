@@ -213,8 +213,7 @@ export class ProductoService {
 
     if (!imagen) return null;
 
-    await ejecutarSP("DeleteProductoImagen", { idImagen: idImagen });
-
+    await ProductoImagen.destroy({ where: { idImagen } });
     return true;
   };
 }

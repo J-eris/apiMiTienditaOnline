@@ -108,24 +108,24 @@ export class ProductoController {
         }));
         imagenesJSON = JSON.stringify({ imagenes });
 
-        const productoActual = await productoService.encontrarProductoPorId(
-          parseInt(idProducto)
-        );
-        if (productoActual && productoActual.imagenes) {
-          const imagenesAntiguas = productoActual.imagenes;
-          imagenesAntiguas.forEach((imagen: any) => {
-            const rutaImagen = path.join(
-              __dirname,
-              `../../${imagen.ruta_imagen}`
-            );
-            fs.unlink(rutaImagen, (err) => {
-              if (err) {
-                console.error(`Error al eliminar imagen: ${rutaImagen}`, err);
-                return;
-              }
-            });
-          });
-        }
+        // const productoActual = await productoService.encontrarProductoPorId(
+        //   parseInt(idProducto)
+        // );
+        // if (productoActual && productoActual.imagenes) {
+        //   const imagenesAntiguas = productoActual.imagenes;
+        //   imagenesAntiguas.forEach((imagen: any) => {
+        //     const rutaImagen = path.join(
+        //       __dirname,
+        //       `../../${imagen.ruta_imagen}`
+        //     );
+        //     fs.unlink(rutaImagen, (err) => {
+        //       if (err) {
+        //         console.error(`Error al eliminar imagen: ${rutaImagen}`, err);
+        //         return;
+        //       }
+        //     });
+        //   });
+        // }
       }
 
       const DatosActualizados = imagenesJSON
@@ -292,6 +292,22 @@ export class ProductoController {
 
   eliminarImagenProducto = async (req: Request, res: Response) => {
     try {
+      const imagenActual = await productoService.encontrarImagenPorId(
+        parseInt(req.params.idImagen)
+      );
+      if (imagenActual) {
+        const rutaImagen = path.join(
+          __dirname,
+          `../../${imagenActual.ruta_imagen}`
+        );
+        fs.unlink(rutaImagen, (err) => {
+          if (err) {
+            console.error(`Error al eliminar imagen: ${rutaImagen}`, err);
+            return sendError(res, "Error al eliminar la imagen.", 500);
+          }
+        });
+      }
+
       const imagen = await productoService.eliminarImagenProducto(
         parseInt(req.params.idImagen)
       );
