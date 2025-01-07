@@ -130,6 +130,25 @@ export class OrdenController {
     }
   };
 
+  obtenerOrdenesPorUsuario = async (req: Request, res: Response) => {
+    try {
+      const ordenes = await ordenService.obtenerOrdenesPorUsuario(
+        parseInt(req.params.idUsuario)
+      );
+
+      if (!ordenes)
+        return sendError(
+          res,
+          `Ordenes del usuario con id ${req.params.idUsuario} no encontradas.`,
+          404
+        );
+
+      sendSuccess(res, ordenes);
+    } catch (error: any) {
+      sendError(res, error.message);
+    }
+  };
+
   cambiarEstadoOrden = async (req: Request, res: Response) => {
     try {
       const {

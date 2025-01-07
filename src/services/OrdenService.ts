@@ -114,6 +114,23 @@ export class OrdenService {
     return total[0];
   };
 
+  obtenerOrdenesPorUsuario = async (
+    idUsuario: number
+  ): Promise<IOrden[] | null> => {
+    const ordenes = await Orden.findAll({
+      where: { usuarios_idusuarios: idUsuario },
+      include: [
+        { association: "usuario", attributes: { exclude: ["password"] } },
+        { association: "estado" },
+        { association: "detallesOrden", include: ["producto"] },
+      ],
+    });
+
+    if (!ordenes) return null;
+
+    return ordenes as IOrden[];
+  };
+
   cambiarEstado = async (
     idOrden: number,
     estado_idestado: number

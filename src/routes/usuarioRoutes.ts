@@ -1,6 +1,7 @@
 import { Router } from "express";
 import usuarioController from "../controllers/UsuarioController";
 import { authenticate } from "../middleware/authMiddleware";
+import OrdenController from "../controllers/OrdenController";
 
 const usuarioRouter = Router();
 
@@ -28,7 +29,7 @@ usuarioRouter.patch(
 usuarioRouter.get(
   "/:idUsuario/ordenes",
   authenticate,
-  usuarioController.obtenerOrdenesPorUsuario
+  OrdenController.obtenerOrdenesPorUsuario
 );
 usuarioRouter.get(
   "/:idUsuario/carritos",
