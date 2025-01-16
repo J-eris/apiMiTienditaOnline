@@ -9,6 +9,11 @@ ordenRouter.get(
   authenticate,
   OrdenController.obtenerTotalQuetzalesAgosto
 );
+ordenRouter.get(
+  "/:idUsuario/pedidos",
+  authenticate,
+  OrdenController.obtenerOrdenesPorUsuario
+);
 
 ordenRouter.get("/", authenticate, OrdenController.listarOrdenes);
 ordenRouter.get("/:idOrden", authenticate, OrdenController.buscarOrdenPorId);
